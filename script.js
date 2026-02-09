@@ -1,31 +1,52 @@
-// Load header & footer
+// Load header
 fetch('header.html')
   .then(res => res.text())
-  .then(data => {
-    document.getElementById('header').innerHTML = data;
+  .then(html => {
+    document.getElementById('header').innerHTML = html;
     initMenu();
   });
 
+// Load footer
 fetch('footer.html')
   .then(res => res.text())
-  .then(data => {
-    document.getElementById('footer').innerHTML = data;
+  .then(html => {
+    document.getElementById('footer').innerHTML = html;
   });
 
-// Hamburger interaction
 function initMenu() {
   const hamburger = document.querySelector('.hamburger');
   const menu = document.querySelector('.menu');
+  const links = menu.querySelectorAll('a');
 
   hamburger.addEventListener('click', () => {
+    const isOpen = menu.classList.toggle('open');
     hamburger.classList.toggle('open');
-    menu.classList.toggle('open');
+
+    if (isOpen) {
+      links.forEach((link, index) => {
+        link.style.animation = 'none';
+        link.offsetHeight; // force reflow
+        link.style.animation = `neonIn 0.6s ease forwards`;
+        link.style.animationDelay = `${index * 0.12}s`;
+      });
+    } else {
+      resetLinks();
+    }
   });
 
-  menu.querySelectorAll('a').forEach(link => {
+  links.forEach(link => {
     link.addEventListener('click', () => {
-      hamburger.classList.remove('open');
       menu.classList.remove('open');
+      hamburger.classList.remove('open');
+      resetLinks();
     });
   });
+
+  function resetLinks() {
+    links.forEach(link => {
+      link.style.opacity = 0;
+      link.style.animation = 'none';
+      link.style.animationDelay = '0s';
+    });
+  }
 }
