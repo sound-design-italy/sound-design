@@ -40,7 +40,7 @@ function initMenu() {
     if (isOpen) {
       links.forEach((link, index) => {
         link.style.animation = 'none';
-        link.offsetHeight;
+        link.offsetHeight; // trigger reflow
         link.style.animation = `neonIn 0.6s ease forwards`;
         link.style.animationDelay = `${index * 0.25}s`;
       });
@@ -73,14 +73,16 @@ document.querySelectorAll('.pack-card').forEach(card => {
 });
 
 // ============================
-// AUDIO PLAYER PRO (WAVEFORM + PLAYHEAD)
+// AUDIO PLAYER PRO (WHATSAPP STYLE)
 // ============================
 const audio = document.getElementById('audio');
 const playBtn = document.getElementById('playBtn');
 const canvas = document.getElementById('waveform');
 const ctx = canvas ? canvas.getContext('2d') : null;
+const timeEl = document.getElementById('time');
 
-let audioCtx, source, analyser, dataArray, animationId;
+let audioCtx, source, analyser, dataArray;
+let animationId;
 let isDragging = false;
 
 // Ridimensiona canvas
@@ -92,95 +94,76 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-// Funzione per disegnare waveform statica iniziale
-function drawStaticWaveform() {
-  if (!canvas || !ctx) return;
-
-  ctx.fillStyle = 'rgba(5,5,5,0.8)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = '#00fff0';
-  ctx.beginPath();
-
-  const bufferLength = 64;
-  const sliceWidth = canvas.width / bufferLength;
-  let x = 0;
-
-  for (let i = 0; i < bufferLength; i++) {
-    const y = canvas.height / 2; // linea piatta al centro
-    if (i === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
-    x += sliceWidth;
-  }
-
-  ctx.stroke();
-}
-
-// Disegna waveform statica all'inizio
-drawStaticWaveform();
-
-// PLAY / PAUSE + inizializza audio context
-if (playBtn && audio && canvas && ctx) {
-  playBtn.addEventListener('click', () => {
-    if (audio.paused) {
-      audio.play();
-      playBtn.textContent = 'PAUSE';
-
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        source = audioCtx.createMediaElementSource(audio);
-        analyser = audioCtx.createAnalyser();
-        source.connect(analyser);
-        analyser.connect(audioCtx.destination);
-        analyser.fftSize = 256;
-        dataArray = new Uint8Array(analyser.frequencyBinCount);
-        drawWaveform();
-      }
-    } else {
-      audio.pause();
-      playBtn.textContent = 'PLAY';
-      cancelAnimationFrame(animationId);
+// Play / Pause
+playBtn.addEventListener('click', () => {
+  if (audio.paused) {
+    audio.play();
+    playBtn.textContent = '⏸';
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      source = audioCtx.createMediaElementSource(audio);
+      analyser = audioCtx.createAnalyser();
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+      analyser.fftSize = 2048;
+      dataArray = new Uint8Array(analyser.frequencyBinCount);
+      drawWaveform();
     }
-  });
-}
+  } else {
+    audio.pause();
+    playBtn.textContent = '▶';
+  }
+});
 
-// Disegna waveform animata + playhead interattivo
+// Aggiorna tempo
+audio.addEventListener('timeupdate', () => {
+  const minutes = Math.floor(audio.currentTime / 60);
+  const seconds = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
+  if (timeEl) timeEl.textContent = `${minutes}:${seconds}`;
+});
+
+// Disegna waveform con fill sotto la linea
 function drawWaveform() {
   animationId = requestAnimationFrame(drawWaveform);
+
+  if (!ctx || !analyser) return;
+
   analyser.getByteTimeDomainData(dataArray);
 
-  // Sfondo
-  ctx.fillStyle = 'rgba(5,5,5,0.8)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  const w = canvas.width;
+  const h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
 
-  // Waveform
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = '#00fff0';
-  ctx.beginPath();
-  const sliceWidth = canvas.width / dataArray.length;
-  let x = 0;
-  for (let i = 0; i < dataArray.length; i++) {
-    const v = dataArray[i] / 128.0;
-    const y = v * canvas.height / 2;
-    if (i === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
-    x += sliceWidth;
-  }
-  ctx.stroke();
-
-  // Playhead rosso
+  // Calcolo percentuale playhead
   const percent = audio.currentTime / audio.duration;
-  const playheadX = percent * canvas.width;
-  ctx.strokeStyle = 'red';
-  ctx.lineWidth = 2;
+
+  // Disegna forma d'onda
   ctx.beginPath();
-  ctx.moveTo(playheadX, 0);
-  ctx.lineTo(playheadX, canvas.height);
+  ctx.moveTo(0, h/2);
+  for (let i = 0; i < dataArray.length; i++) {
+    const x = (i / dataArray.length) * w;
+    const y = (dataArray[i] / 128.0) * h/2;
+    ctx.lineTo(x, y);
+  }
+  ctx.lineTo(w, h/2);
+  ctx.closePath();
+
+  // Fill sotto la linea
+  const gradient = ctx.createLinearGradient(0, 0, w, 0);
+  gradient.addColorStop(0, '#00fff0');
+  gradient.addColorStop(percent, '#00fff0');
+  gradient.addColorStop(percent, '#333');
+  gradient.addColorStop(1, '#333');
+  ctx.fillStyle = gradient;
+  ctx.fill();
+
+  // Outline waveform
+  ctx.strokeStyle = '#00fff0';
+  ctx.lineWidth = 2;
   ctx.stroke();
 }
 
-// FUNZIONE PER SEEK TRAMITE CLICK O DRAG
+// Seek tramite click o drag
 function seek(e) {
   const rect = canvas.getBoundingClientRect();
   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -190,10 +173,11 @@ function seek(e) {
 }
 
 // Drag e click interattivo
-canvas.addEventListener('mousedown', () => isDragging = true);
-canvas.addEventListener('mousemove', e => { if(isDragging) seek(e); });
+canvas.addEventListener('mousedown', e => { isDragging = true; seek(e); });
+canvas.addEventListener('mousemove', e => { if (isDragging) seek(e); });
 canvas.addEventListener('mouseup', () => isDragging = false);
+canvas.addEventListener('mouseleave', () => isDragging = false);
 
-canvas.addEventListener('touchstart', () => isDragging = true);
-canvas.addEventListener('touchmove', e => { if(isDragging) seek(e); });
+canvas.addEventListener('touchstart', e => { isDragging = true; seek(e); });
+canvas.addEventListener('touchmove', e => { if (isDragging) seek(e); });
 canvas.addEventListener('touchend', () => isDragging = false);
