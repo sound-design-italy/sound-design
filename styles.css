@@ -524,7 +524,7 @@ a {
 
 .access-btn {
   display: inline-block;
-  padding: 10px 24px;
+  padding: 6px 24px; /* ALTEZZA BOTTONE */
   background: linear-gradient(90deg, #00fff0, #00b3a8);
   color: #050505;
   font-weight: 500;
