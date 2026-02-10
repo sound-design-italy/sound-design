@@ -697,7 +697,7 @@ main {
 }
 
 /* ============================
-   PUNTINO AUDIO INTERATTIVO
+   PUNTINO AUDIO INTERATTIVO - VERSIONE VISIBILE
 ============================ */
 .progress-container {
   position: relative;
@@ -712,7 +712,7 @@ main {
   position: absolute;
   height: 100%;
   width: 0%;
-  background: #00fff0;
+  background: #00fff0; /* barra neon originale */
   border-radius: 4px;
 }
 
@@ -720,27 +720,27 @@ main {
   position: absolute;
   top: 50%;
   left: 0%;
-  width: 20px;               /* più grande per visibilità */
-  height: 20px;              /* più grande per visibilità */
-  background: #00fff0;       /* colore neon */
+  width: 20px;
+  height: 20px;
+  background: #FFFF00;       /* puntino giallo neon per visibilità */
   border: 2px solid #050505; /* bordo scuro per contrasto */
   border-radius: 50%;
   transform: translate(-50%, -50%);
   cursor: pointer;
   box-shadow: 
-    0 0 12px #00fff0,        /* glow esterno */
-    0 0 4px #00fff0 inset;   /* glow interno */
-  touch-action: none;        /* drag su mobile */
-  z-index: 2;                /* sopra la barra */
-  transition: transform 0.2s, box-shadow 0.2s; /* effetto hover/drag */
+    0 0 12px #FFFF00,       /* glow esterno giallo */
+    0 0 4px #FFFF00 inset;  /* glow interno giallo */
+  touch-action: none;
+  z-index: 2;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 /* HOVER / DRAG - effetto interattivo */
 .progress-thumb:hover {
   transform: translate(-50%, -50%) scale(1.2);
   box-shadow: 
-    0 0 18px #00fff0,
-    0 0 6px #00fff0 inset;
+    0 0 18px #FFFF00,
+    0 0 6px #FFFF00 inset;
 }
 
 /* VERSIONE MOBILE - leggermente più piccola */
