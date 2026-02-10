@@ -74,20 +74,46 @@ document.querySelectorAll('.pack-card').forEach(card => {
 });
 
 // ============================
-// AUDIO PLAYER PRO
+// AUDIO PLAYER PRO (FORMA D'ONDA)
 // ============================
 const audio = document.getElementById('audio');
 const playBtn = document.getElementById('playBtn');
 const progressBar = document.getElementById('progress');
+const canvas = document.getElementById('waveform');
+const ctx = canvas ? canvas.getContext('2d') : null;
 
-if (playBtn && audio && progressBar) {
+let audioCtx, source, analyser, dataArray, animationId;
+
+// Ridimensiona canvas
+function resizeCanvas() {
+  if (!canvas) return;
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+if (playBtn && audio && progressBar && canvas && ctx) {
   playBtn.addEventListener('click', () => {
     if (audio.paused) {
       audio.play();
       playBtn.textContent = 'PAUSE';
+
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        source = audioCtx.createMediaElementSource(audio);
+        analyser = audioCtx.createAnalyser();
+        source.connect(analyser);
+        analyser.connect(audioCtx.destination);
+        analyser.fftSize = 256;
+        const bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+        drawWaveform();
+      }
     } else {
       audio.pause();
       playBtn.textContent = 'PLAY';
+      cancelAnimationFrame(animationId);
     }
   });
 
@@ -95,4 +121,36 @@ if (playBtn && audio && progressBar) {
     const percent = (audio.currentTime / audio.duration) * 100;
     progressBar.style.width = percent + '%';
   });
+}
+
+// Disegna la forma d'onda
+function drawWaveform() {
+  animationId = requestAnimationFrame(drawWaveform);
+  analyser.getByteTimeDomainData(dataArray);
+
+  ctx.fillStyle = 'rgba(5,5,5,0.8)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#00fff0';
+  ctx.beginPath();
+
+  const sliceWidth = canvas.width / dataArray.length;
+  let x = 0;
+
+  for (let i = 0; i < dataArray.length; i++) {
+    const v = dataArray[i] / 128.0;
+    const y = v * canvas.height / 2;
+
+    if (i === 0) {
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, y);
+    }
+
+    x += sliceWidth;
+  }
+
+  ctx.lineTo(canvas.width, canvas.height / 2);
+  ctx.stroke();
 }

@@ -580,3 +580,19 @@ main {
   padding: 24px 0;
 }
 
+/* CANVAS FORMA D'ONDA */
+#waveform {
+  width: 100%;
+  height: 60px;
+  background: rgba(5,5,5,0.05);
+  border-radius: 4px;
+  margin: 8px 0; /* spazio tra testo e barra */
+  display: block;
+}
+
+/* STILE LINEA FORMA D'ONDA */
+.audio-player-pro canvas {
+  border: 1px solid rgba(0,255,240,0.2);
+  box-shadow: 0 0 10px rgba(0,255,240,0.3);
+}
+
