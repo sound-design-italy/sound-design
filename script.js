@@ -38,10 +38,9 @@ function initMenu() {
     hamburger.classList.toggle('open');
 
     if (isOpen) {
-      // animazione neon sequenziale
       links.forEach((link, index) => {
-        link.style.animation = 'none';  // reset
-        link.offsetHeight;              // trigger reflow
+        link.style.animation = 'none';
+        link.offsetHeight;
         link.style.animation = `neonIn 0.6s ease forwards`;
         link.style.animationDelay = `${index * 0.25}s`;
       });
@@ -74,7 +73,7 @@ document.querySelectorAll('.pack-card').forEach(card => {
 });
 
 // ============================
-// AUDIO PLAYER PRO (FORMA D'ONDA)
+// AUDIO PLAYER PRO (FORMA D'ONDA STATICA INIZIALE)
 // ============================
 const audio = document.getElementById('audio');
 const playBtn = document.getElementById('playBtn');
@@ -93,43 +92,26 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-// Funzione per disegnare la waveform
-function drawWaveform() {
-  animationId = requestAnimationFrame(drawWaveform);
+// Funzione per disegnare forma d'onda statica (prima del play)
+function drawStaticWaveform() {
+  if (!canvas || !ctx) return;
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'rgba(5,5,5,0.8)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // dati audio reali se in play, altrimenti dati casuali
-  if (audioCtx && analyser && !audio.paused) {
-    analyser.getByteTimeDomainData(dataArray);
-  } else {
-    // forma d'onda statica casuale
-    if (!dataArray) dataArray = new Uint8Array(128);
-    for (let i = 0; i < dataArray.length; i++) {
-      dataArray[i] = 128 + Math.random() * 20 - 10; // picchi casuali
-    }
-  }
-
-  // disegna linea neon glow
   ctx.lineWidth = 2;
   ctx.strokeStyle = '#00fff0';
-  ctx.shadowColor = '#00fff0';
-  ctx.shadowBlur = 10;
   ctx.beginPath();
 
-  const sliceWidth = canvas.width / dataArray.length;
+  const bufferLength = 64; // punti fissi
+  const sliceWidth = canvas.width / bufferLength;
   let x = 0;
 
-  for (let i = 0; i < dataArray.length; i++) {
-    const v = dataArray[i] / 128.0;
-    const y = (v * canvas.height) / 2;
-
-    if (i === 0) {
-      ctx.moveTo(x, y);
-    } else {
-      ctx.lineTo(x, y);
-    }
-
+  for (let i = 0; i < bufferLength; i++) {
+    const v = 1; // linea piatta al centro
+    const y = (v * canvas.height / 2);
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
     x += sliceWidth;
   }
 
@@ -137,10 +119,9 @@ function drawWaveform() {
   ctx.stroke();
 }
 
-// avvia la waveform anche senza play
-drawWaveform();
+// Disegna forma statica iniziale
+drawStaticWaveform();
 
-// PLAY / PAUSE audio
 if (playBtn && audio && progressBar && canvas && ctx) {
   playBtn.addEventListener('click', () => {
     if (audio.paused) {
@@ -156,10 +137,12 @@ if (playBtn && audio && progressBar && canvas && ctx) {
         analyser.fftSize = 256;
         const bufferLength = analyser.frequencyBinCount;
         dataArray = new Uint8Array(bufferLength);
+        drawWaveform();
       }
     } else {
       audio.pause();
       playBtn.textContent = 'PLAY';
+      cancelAnimationFrame(animationId);
     }
   });
 
@@ -167,4 +150,31 @@ if (playBtn && audio && progressBar && canvas && ctx) {
     const percent = (audio.currentTime / audio.duration) * 100;
     progressBar.style.width = percent + '%';
   });
+}
+
+// Disegna la forma d'onda animata durante la riproduzione
+function drawWaveform() {
+  animationId = requestAnimationFrame(drawWaveform);
+  analyser.getByteTimeDomainData(dataArray);
+
+  ctx.fillStyle = 'rgba(5,5,5,0.8)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#00fff0';
+  ctx.beginPath();
+
+  const sliceWidth = canvas.width / dataArray.length;
+  let x = 0;
+
+  for (let i = 0; i < dataArray.length; i++) {
+    const v = dataArray[i] / 128.0;
+    const y = v * canvas.height / 2;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+    x += sliceWidth;
+  }
+
+  ctx.lineTo(canvas.width, canvas.height / 2);
+  ctx.stroke();
 }
