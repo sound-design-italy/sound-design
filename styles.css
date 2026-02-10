@@ -696,7 +696,9 @@ main {
   }
 }
 
-/* PUNTINO AUDIO */
+/* ============================
+   PUNTINO AUDIO INTERATTIVO
+============================ */
 .progress-container {
   position: relative;
   height: 8px;
@@ -718,11 +720,33 @@ main {
   position: absolute;
   top: 50%;
   left: 0%;
-  width: 16px;
-  height: 16px;
-  background: #00fff0;
+  width: 20px;               /* più grande per visibilità */
+  height: 20px;              /* più grande per visibilità */
+  background: #00fff0;       /* colore neon */
+  border: 2px solid #050505; /* bordo scuro per contrasto */
   border-radius: 50%;
   transform: translate(-50%, -50%);
   cursor: pointer;
-  touch-action: none; /* permette il drag su mobile */
+  box-shadow: 
+    0 0 12px #00fff0,        /* glow esterno */
+    0 0 4px #00fff0 inset;   /* glow interno */
+  touch-action: none;        /* drag su mobile */
+  z-index: 2;                /* sopra la barra */
+  transition: transform 0.2s, box-shadow 0.2s; /* effetto hover/drag */
+}
+
+/* HOVER / DRAG - effetto interattivo */
+.progress-thumb:hover {
+  transform: translate(-50%, -50%) scale(1.2);
+  box-shadow: 
+    0 0 18px #00fff0,
+    0 0 6px #00fff0 inset;
+}
+
+/* VERSIONE MOBILE - leggermente più piccola */
+@media (max-width: 600px) {
+  .progress-thumb {
+    width: 18px;
+    height: 18px;
+  }
 }
