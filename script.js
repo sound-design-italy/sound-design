@@ -73,15 +73,18 @@ document.querySelectorAll('.pack-card').forEach(card => {
 });
 
 // ============================
-// AUDIO PLAYER PRO (FORMA D'ONDA STATICA INIZIALE)
+// AUDIO PLAYER PRO (FORMA D'ONDA STATICA E ANIMATA)
 // ============================
 const audio = document.getElementById('audio');
 const playBtn = document.getElementById('playBtn');
 const progressBar = document.getElementById('progress');
+const progressThumb = document.getElementById('progressThumb');
+const progressContainer = document.getElementById('progressContainer');
 const canvas = document.getElementById('waveform');
 const ctx = canvas ? canvas.getContext('2d') : null;
 
 let audioCtx, source, analyser, dataArray, animationId;
+let isDragging = false;
 
 // Ridimensiona canvas
 function resizeCanvas() {
@@ -92,7 +95,7 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-// Funzione per disegnare forma d'onda statica (prima del play)
+// Funzione per disegnare forma d'onda statica
 function drawStaticWaveform() {
   if (!canvas || !ctx) return;
 
@@ -103,13 +106,12 @@ function drawStaticWaveform() {
   ctx.strokeStyle = '#00fff0';
   ctx.beginPath();
 
-  const bufferLength = 64; // punti fissi
+  const bufferLength = 64;
   const sliceWidth = canvas.width / bufferLength;
   let x = 0;
 
   for (let i = 0; i < bufferLength; i++) {
-    const v = 1; // linea piatta al centro
-    const y = (v * canvas.height / 2);
+    const y = canvas.height / 2; // linea piatta al centro
     if (i === 0) ctx.moveTo(x, y);
     else ctx.lineTo(x, y);
     x += sliceWidth;
@@ -122,6 +124,7 @@ function drawStaticWaveform() {
 // Disegna forma statica iniziale
 drawStaticWaveform();
 
+// PLAY / PAUSE + inizializza audio context
 if (playBtn && audio && progressBar && canvas && ctx) {
   playBtn.addEventListener('click', () => {
     if (audio.paused) {
@@ -146,13 +149,60 @@ if (playBtn && audio && progressBar && canvas && ctx) {
     }
   });
 
+  // Aggiorna barra e puntino durante la riproduzione
   audio.addEventListener('timeupdate', () => {
-    const percent = (audio.currentTime / audio.duration) * 100;
-    progressBar.style.width = percent + '%';
+    if (!isDragging) {
+      const percent = (audio.currentTime / audio.duration) * 100;
+      progressBar.style.width = percent + '%';
+      progressThumb.style.left = percent + '%';
+    }
   });
 }
 
-// Disegna la forma d'onda animata durante la riproduzione
+// CLICK sulla barra per saltare
+progressContainer.addEventListener('click', (e) => {
+  const rect = progressContainer.getBoundingClientRect();
+  const percent = (e.clientX - rect.left) / rect.width;
+  audio.currentTime = percent * audio.duration;
+});
+
+// DRAG puntino (DESKTOP)
+progressThumb.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  e.preventDefault();
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (isDragging) {
+    const rect = progressContainer.getBoundingClientRect();
+    let percent = (e.clientX - rect.left) / rect.width;
+    percent = Math.max(0, Math.min(1, percent));
+    progressBar.style.width = (percent * 100) + '%';
+    progressThumb.style.left = (percent * 100) + '%';
+    audio.currentTime = percent * audio.duration;
+  }
+});
+
+document.addEventListener('mouseup', () => {
+  isDragging = false;
+});
+
+// DRAG puntino (TOUCH MOBILE)
+progressThumb.addEventListener('touchstart', () => isDragging = true);
+progressThumb.addEventListener('touchmove', (e) => {
+  if (isDragging) {
+    const touch = e.touches[0];
+    const rect = progressContainer.getBoundingClientRect();
+    let percent = (touch.clientX - rect.left) / rect.width;
+    percent = Math.max(0, Math.min(1, percent));
+    progressBar.style.width = (percent * 100) + '%';
+    progressThumb.style.left = (percent * 100) + '%';
+    audio.currentTime = percent * audio.duration;
+  }
+});
+progressThumb.addEventListener('touchend', () => isDragging = false);
+
+// Funzione per disegnare waveform animata
 function drawWaveform() {
   animationId = requestAnimationFrame(drawWaveform);
   analyser.getByteTimeDomainData(dataArray);
