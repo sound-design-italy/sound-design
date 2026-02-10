@@ -7,7 +7,7 @@ fetch('header.html')
   .then(res => res.text())
   .then(html => {
     document.getElementById('header').innerHTML = html;
-    initMenu();
+    initMenu(); // inizializza menu dopo il caricamento
   });
 
 // Load footer
@@ -25,14 +25,23 @@ function initMenu() {
   const menu = document.querySelector('.menu');
   const links = menu.querySelectorAll('a');
 
+  function resetLinks() {
+    links.forEach(link => {
+      link.style.opacity = 0;
+      link.style.animation = 'none';
+      link.style.animationDelay = '0s';
+    });
+  }
+
   hamburger.addEventListener('click', () => {
     const isOpen = menu.classList.toggle('open');
     hamburger.classList.toggle('open');
 
     if (isOpen) {
+      // animazione neon sequenziale
       links.forEach((link, index) => {
-        link.style.animation = 'none';
-        link.offsetHeight; // force reflow
+        link.style.animation = 'none';  // reset
+        link.offsetHeight;              // trigger reflow
         link.style.animation = `neonIn 0.6s ease forwards`;
         link.style.animationDelay = `${index * 0.12}s`;
       });
@@ -48,14 +57,6 @@ function initMenu() {
       resetLinks();
     });
   });
-
-  function resetLinks() {
-    links.forEach(link => {
-      link.style.opacity = 0;
-      link.style.animation = 'none';
-      link.style.animationDelay = '0s';
-    });
-  }
 }
 
 // ============================
@@ -64,9 +65,7 @@ function initMenu() {
 document.querySelectorAll('.pack-card').forEach(card => {
   card.addEventListener('click', () => {
     const overlay = document.querySelector('.page-overlay');
-    if (overlay) {
-      overlay.classList.add('active');
-    }
+    if (overlay) overlay.classList.add('active');
 
     setTimeout(() => {
       window.location.href = card.dataset.link;
