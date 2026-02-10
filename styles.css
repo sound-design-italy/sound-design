@@ -616,3 +616,28 @@ main {
 .logo img {
   height: 60px; /* puoi modificare l'altezza del logo */
 }
+
+/* CENTRA TUTTO ORIZZONTALMENTE NEL HERO */
+.hero-content {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%); /* centra il contenuto orizzontalmente */
+  max-width: 700px;
+  text-align: center; /* centra testi e bottoni */
+  color: #00fff0;
+}
+
+/* Bottone già inline-block, quindi con text-align: center rimane centrato */
+.hero-btn {
+  display: inline-block; /* importante per il centraggio */
+  margin-top: 24px;
+  padding: 16px 32px;
+  background: linear-gradient(90deg, #00fff0, #00b3a8);
+  color: #050505;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 500;
+  box-shadow: 0 0 30px rgba(0,255,240,0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
