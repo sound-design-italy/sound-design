@@ -93,6 +93,54 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
+// Funzione per disegnare la waveform
+function drawWaveform() {
+  animationId = requestAnimationFrame(drawWaveform);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // dati audio reali se in play, altrimenti dati casuali
+  if (audioCtx && analyser && !audio.paused) {
+    analyser.getByteTimeDomainData(dataArray);
+  } else {
+    // forma d'onda statica casuale
+    if (!dataArray) dataArray = new Uint8Array(128);
+    for (let i = 0; i < dataArray.length; i++) {
+      dataArray[i] = 128 + Math.random() * 20 - 10; // picchi casuali
+    }
+  }
+
+  // disegna linea neon glow
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#00fff0';
+  ctx.shadowColor = '#00fff0';
+  ctx.shadowBlur = 10;
+  ctx.beginPath();
+
+  const sliceWidth = canvas.width / dataArray.length;
+  let x = 0;
+
+  for (let i = 0; i < dataArray.length; i++) {
+    const v = dataArray[i] / 128.0;
+    const y = (v * canvas.height) / 2;
+
+    if (i === 0) {
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, y);
+    }
+
+    x += sliceWidth;
+  }
+
+  ctx.lineTo(canvas.width, canvas.height / 2);
+  ctx.stroke();
+}
+
+// avvia la waveform anche senza play
+drawWaveform();
+
+// PLAY / PAUSE audio
 if (playBtn && audio && progressBar && canvas && ctx) {
   playBtn.addEventListener('click', () => {
     if (audio.paused) {
@@ -108,12 +156,10 @@ if (playBtn && audio && progressBar && canvas && ctx) {
         analyser.fftSize = 256;
         const bufferLength = analyser.frequencyBinCount;
         dataArray = new Uint8Array(bufferLength);
-        drawWaveform();
       }
     } else {
       audio.pause();
       playBtn.textContent = 'PLAY';
-      cancelAnimationFrame(animationId);
     }
   });
 
@@ -121,36 +167,4 @@ if (playBtn && audio && progressBar && canvas && ctx) {
     const percent = (audio.currentTime / audio.duration) * 100;
     progressBar.style.width = percent + '%';
   });
-}
-
-// Disegna la forma d'onda
-function drawWaveform() {
-  animationId = requestAnimationFrame(drawWaveform);
-  analyser.getByteTimeDomainData(dataArray);
-
-  ctx.fillStyle = 'rgba(5,5,5,0.8)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = '#00fff0';
-  ctx.beginPath();
-
-  const sliceWidth = canvas.width / dataArray.length;
-  let x = 0;
-
-  for (let i = 0; i < dataArray.length; i++) {
-    const v = dataArray[i] / 128.0;
-    const y = v * canvas.height / 2;
-
-    if (i === 0) {
-      ctx.moveTo(x, y);
-    } else {
-      ctx.lineTo(x, y);
-    }
-
-    x += sliceWidth;
-  }
-
-  ctx.lineTo(canvas.width, canvas.height / 2);
-  ctx.stroke();
 }
