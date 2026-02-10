@@ -13,6 +13,11 @@ html, body {
   background: #050505;
   max-width: 100%;
   overflow-x: hidden;
+
+  /* ===== STICKY FOOTER ===== */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* LINKS */
@@ -367,9 +372,9 @@ a {
 ============================ */
 @media (min-width: 1024px) {
   .product-hero video {
-    object-fit: contain;      /* mostra tutto il soggetto senza tagli */
-    object-position: center;  /* centra il video orizzontalmente e verticalmente */
-    background: #050505;      /* sfondo nero per le “strisce” */
+    object-fit: contain;
+    object-position: center;
+    background: #050505;
   }
 }
 
@@ -563,5 +568,14 @@ a {
 
 /* ======= OFFSET PER HEADER FIXED ======= */
 main {
+  flex: 1;            /* fa da “spazio flessibile” tra header e footer */
   padding-top: 120px; /* altezza stimata dell'header */
+}
+
+/* ======= FOOTER ======= */
+.footer {
+  background: #050505;
+  color: #00fff0;
+  text-align: center;
+  padding: 24px 0;
 }
