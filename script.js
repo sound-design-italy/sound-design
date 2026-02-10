@@ -1,3 +1,7 @@
+// ============================
+// LOAD HEADER & FOOTER
+// ============================
+
 // Load header
 fetch('header.html')
   .then(res => res.text())
@@ -13,6 +17,9 @@ fetch('footer.html')
     document.getElementById('footer').innerHTML = html;
   });
 
+// ============================
+// HAMBURGER MENU + NEON LINKS
+// ============================
 function initMenu() {
   const hamburger = document.querySelector('.hamburger');
   const menu = document.querySelector('.menu');
@@ -51,11 +58,15 @@ function initMenu() {
   }
 }
 
-// Pack card interaction
+// ============================
+// PACK CARD INTERACTION
+// ============================
 document.querySelectorAll('.pack-card').forEach(card => {
   card.addEventListener('click', () => {
     const overlay = document.querySelector('.page-overlay');
-    overlay.classList.add('active');
+    if (overlay) {
+      overlay.classList.add('active');
+    }
 
     setTimeout(() => {
       window.location.href = card.dataset.link;
@@ -63,18 +74,26 @@ document.querySelectorAll('.pack-card').forEach(card => {
   });
 });
 
-// AUDIO PLAYER
+// ============================
+// AUDIO PLAYER PRO
+// ============================
 const audio = document.getElementById('audio');
 const playBtn = document.getElementById('playBtn');
+const progressBar = document.getElementById('progress');
 
-if (playBtn) {
+if (playBtn && audio && progressBar) {
   playBtn.addEventListener('click', () => {
     if (audio.paused) {
       audio.play();
-      playBtn.textContent = '❚❚';
+      playBtn.textContent = 'PAUSE';
     } else {
       audio.pause();
-      playBtn.textContent = '▶';
+      playBtn.textContent = 'PLAY';
     }
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    const percent = (audio.currentTime / audio.duration) * 100;
+    progressBar.style.width = percent + '%';
   });
 }
