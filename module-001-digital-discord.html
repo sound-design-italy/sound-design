@@ -4,149 +4,87 @@
   <meta charset="UTF-8" />
   <title>Epic Trailer Pack – CYBERSOUND</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Canvas e audio player */
+    .audio-player-pro {
+      position: relative;
+      margin: 20px 0;
+    }
+
+    #waveform {
+      width: 100%;
+      height: 100px;
+      background: rgba(5,5,5,0.8);
+      border-radius: 8px;
+      cursor: pointer;
+      touch-action: none;
+    }
+  </style>
 </head>
 <body>
 
-<div id="header"></div>
+  <!-- HEADER DINAMICO -->
+  <div id="header"></div>
 
-<main class="product-page">
+  <main class="product-page">
 
-  <!-- HERO -->
-  <section class="product-hero">
-    <video src="prodotti/prodotto1.mp4" autoplay muted loop playsinline></video>
-    <div class="hero-overlay"></div>
+    <!-- HERO -->
+    <section class="product-hero">
+      <video src="prodotti/prodotto1.mp4" autoplay muted loop playsinline></video>
+      <div class="hero-overlay"></div>
 
-    <div class="hero-content">
-      <h1>Epic Trailer Pack</h1>
-      <p>Cinematic impacts, risers &amp; hits for modern trailers</p>
-      <span class="price">€49</span>
-    </div>
-  </section>
+      <div class="hero-content">
+        <h1>Epic Trailer Pack</h1>
+        <p>Cinematic impacts, risers &amp; hits for modern trailers</p>
+        <span class="price">€49</span>
+      </div>
+    </section>
 
-  <!-- CONTENT -->
-  <section class="product-content">
-    <div class="product-card">
+    <!-- CONTENT -->
+    <section class="product-content">
+      <div class="product-card">
 
-      <!-- AUDIO PLAYER PRO -->
-      <div class="audio-player-pro">
-        <button id="playBtn">PLAY</button>
-
-        <!-- CANVAS PER FORMA D'ONDA -->
-        <canvas id="waveform"></canvas>
-
-        <!-- BARRA AUDIO INTERATTIVA -->
-        <div class="progress-container" id="progressContainer">
-          <div class="progress-bar" id="progress"></div>
-          <div class="progress-thumb" id="progressThumb"></div>
+        <!-- AUDIO PLAYER PRO -->
+        <div class="audio-player-pro">
+          <button id="playBtn">PLAY</button>
+          <canvas id="waveform"></canvas>
+          <audio id="audio" src="audio/audio1.mp3"></audio>
         </div>
 
-        <span class="time">DEMO</span>
+        <!-- DESCRIPTION -->
+        <div class="product-description">
+          <h2>About this pack</h2>
+          <p>
+            Epic Trailer Pack is a high-end cinematic sound library designed for
+            trailers, games and dramatic visual content. Crafted with deep impacts,
+            massive risers and powerful hits.
+          </p>
 
-        <audio id="audio" src="audio/audio1.mp3"></audio>
+          <ul class="features">
+            <li>✔ 120+ cinematic sounds</li>
+            <li>✔ 24bit / 96kHz WAV</li>
+            <li>✔ Trailer &amp; game ready</li>
+            <li>✔ Royalty-free</li>
+          </ul>
+        </div>
+
+        <!-- BUY BUTTON -->
+        <button class="buy-btn">ACCESS</button>
+
       </div>
+    </section>
 
-      <!-- DESCRIPTION -->
-      <div class="product-description">
-        <h2>About this pack</h2>
-        <p>
-          Epic Trailer Pack is a high-end cinematic sound library designed for
-          trailers, games and dramatic visual content. Crafted with deep impacts,
-          massive risers and powerful hits.
-        </p>
+  </main>
 
-        <ul class="features">
-          <li>✔ 120+ cinematic sounds</li>
-          <li>✔ 24bit / 96kHz WAV</li>
-          <li>✔ Trailer &amp; game ready</li>
-          <li>✔ Royalty-free</li>
-        </ul>
-      </div>
+  <!-- FOOTER DINAMICO -->
+  <div id="footer"></div>
 
-      <!-- BUY BUTTON -->
-      <button class="buy-btn">ACCESS</button>
+  <!-- OVERLAY PER TRANSIZIONI -->
+  <div class="page-overlay"></div>
 
-    </div>
-  </section>
-
-</main>
-
-<div id="footer"></div>
-
-<!-- SCRIPT AUDIO INTERATTIVO -->
-<script>
-const audio = document.getElementById('audio');
-const playBtn = document.getElementById('playBtn');
-const progress = document.getElementById('progress');
-const progressThumb = document.getElementById('progressThumb');
-const progressContainer = document.getElementById('progressContainer');
-
-let isDragging = false;
-
-// PLAY / PAUSE
-playBtn.addEventListener('click', () => {
-  if (audio.paused) {
-    audio.play();
-    playBtn.textContent = 'PAUSE';
-  } else {
-    audio.pause();
-    playBtn.textContent = 'PLAY';
-  }
-});
-
-// AGGIORNA LA BARRA MENTRE L’AUDIO SUONA
-audio.addEventListener('timeupdate', () => {
-  if (!isDragging) {
-    const percent = (audio.currentTime / audio.duration) * 100;
-    progress.style.width = percent + '%';
-    progressThumb.style.left = percent + '%';
-  }
-});
-
-// CLICK SULLA BARRA PER SALTARE
-progressContainer.addEventListener('click', (e) => {
-  const rect = progressContainer.getBoundingClientRect();
-  const percent = (e.clientX - rect.left) / rect.width;
-  audio.currentTime = percent * audio.duration;
-});
-
-// DRAG DEL PUNTINO (DESKTOP)
-progressThumb.addEventListener('mousedown', (e) => {
-  isDragging = true;
-  e.preventDefault();
-});
-
-document.addEventListener('mousemove', (e) => {
-  if (isDragging) {
-    const rect = progressContainer.getBoundingClientRect();
-    let percent = (e.clientX - rect.left) / rect.width;
-    percent = Math.max(0, Math.min(1, percent));
-    progress.style.width = (percent * 100) + '%';
-    progressThumb.style.left = (percent * 100) + '%';
-    audio.currentTime = percent * audio.duration;
-  }
-});
-
-document.addEventListener('mouseup', () => {
-  if (isDragging) isDragging = false;
-});
-
-// DRAG DEL PUNTINO (TOUCH MOBILE)
-progressThumb.addEventListener('touchstart', () => isDragging = true);
-progressThumb.addEventListener('touchmove', (e) => {
-  if (isDragging) {
-    const touch = e.touches[0];
-    const rect = progressContainer.getBoundingClientRect();
-    let percent = (touch.clientX - rect.left) / rect.width;
-    percent = Math.max(0, Math.min(1, percent));
-    progress.style.width = (percent * 100) + '%';
-    progressThumb.style.left = (percent * 100) + '%';
-    audio.currentTime = percent * audio.duration;
-  }
-});
-progressThumb.addEventListener('touchend', () => isDragging = false);
-</script>
-
+  <!-- SCRIPT PRINCIPALE -->
+  <script src="script.js"></script>
+  
 </body>
 </html>

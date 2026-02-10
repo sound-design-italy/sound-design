@@ -73,13 +73,10 @@ document.querySelectorAll('.pack-card').forEach(card => {
 });
 
 // ============================
-// AUDIO PLAYER PRO (FORMA D'ONDA STATICA E ANIMATA)
+// AUDIO PLAYER PRO (WAVEFORM + PLAYHEAD)
 // ============================
 const audio = document.getElementById('audio');
 const playBtn = document.getElementById('playBtn');
-const progressBar = document.getElementById('progress');
-const progressThumb = document.getElementById('progressThumb');
-const progressContainer = document.getElementById('progressContainer');
 const canvas = document.getElementById('waveform');
 const ctx = canvas ? canvas.getContext('2d') : null;
 
@@ -95,7 +92,7 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-// Funzione per disegnare forma d'onda statica
+// Funzione per disegnare waveform statica iniziale
 function drawStaticWaveform() {
   if (!canvas || !ctx) return;
 
@@ -117,15 +114,14 @@ function drawStaticWaveform() {
     x += sliceWidth;
   }
 
-  ctx.lineTo(canvas.width, canvas.height / 2);
   ctx.stroke();
 }
 
-// Disegna forma statica iniziale
+// Disegna waveform statica all'inizio
 drawStaticWaveform();
 
 // PLAY / PAUSE + inizializza audio context
-if (playBtn && audio && progressBar && canvas && ctx) {
+if (playBtn && audio && canvas && ctx) {
   playBtn.addEventListener('click', () => {
     if (audio.paused) {
       audio.play();
@@ -138,8 +134,7 @@ if (playBtn && audio && progressBar && canvas && ctx) {
         source.connect(analyser);
         analyser.connect(audioCtx.destination);
         analyser.fftSize = 256;
-        const bufferLength = analyser.frequencyBinCount;
-        dataArray = new Uint8Array(bufferLength);
+        dataArray = new Uint8Array(analyser.frequencyBinCount);
         drawWaveform();
       }
     } else {
@@ -148,75 +143,23 @@ if (playBtn && audio && progressBar && canvas && ctx) {
       cancelAnimationFrame(animationId);
     }
   });
-
-  // Aggiorna barra e puntino durante la riproduzione
-  audio.addEventListener('timeupdate', () => {
-    if (!isDragging) {
-      const percent = (audio.currentTime / audio.duration) * 100;
-      progressBar.style.width = percent + '%';
-      progressThumb.style.left = percent + '%';
-    }
-  });
 }
 
-// CLICK sulla barra per saltare
-progressContainer.addEventListener('click', (e) => {
-  const rect = progressContainer.getBoundingClientRect();
-  const percent = (e.clientX - rect.left) / rect.width;
-  audio.currentTime = percent * audio.duration;
-});
-
-// DRAG puntino (DESKTOP)
-progressThumb.addEventListener('mousedown', (e) => {
-  isDragging = true;
-  e.preventDefault();
-});
-
-document.addEventListener('mousemove', (e) => {
-  if (isDragging) {
-    const rect = progressContainer.getBoundingClientRect();
-    let percent = (e.clientX - rect.left) / rect.width;
-    percent = Math.max(0, Math.min(1, percent));
-    progressBar.style.width = (percent * 100) + '%';
-    progressThumb.style.left = (percent * 100) + '%';
-    audio.currentTime = percent * audio.duration;
-  }
-});
-
-document.addEventListener('mouseup', () => {
-  isDragging = false;
-});
-
-// DRAG puntino (TOUCH MOBILE)
-progressThumb.addEventListener('touchstart', () => isDragging = true);
-progressThumb.addEventListener('touchmove', (e) => {
-  if (isDragging) {
-    const touch = e.touches[0];
-    const rect = progressContainer.getBoundingClientRect();
-    let percent = (touch.clientX - rect.left) / rect.width;
-    percent = Math.max(0, Math.min(1, percent));
-    progressBar.style.width = (percent * 100) + '%';
-    progressThumb.style.left = (percent * 100) + '%';
-    audio.currentTime = percent * audio.duration;
-  }
-});
-progressThumb.addEventListener('touchend', () => isDragging = false);
-
-// Funzione per disegnare waveform animata
+// Disegna waveform animata + playhead interattivo
 function drawWaveform() {
   animationId = requestAnimationFrame(drawWaveform);
   analyser.getByteTimeDomainData(dataArray);
 
+  // Sfondo
   ctx.fillStyle = 'rgba(5,5,5,0.8)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  // Waveform
   ctx.lineWidth = 2;
   ctx.strokeStyle = '#00fff0';
   ctx.beginPath();
-
   const sliceWidth = canvas.width / dataArray.length;
   let x = 0;
-
   for (let i = 0; i < dataArray.length; i++) {
     const v = dataArray[i] / 128.0;
     const y = v * canvas.height / 2;
@@ -224,7 +167,33 @@ function drawWaveform() {
     else ctx.lineTo(x, y);
     x += sliceWidth;
   }
+  ctx.stroke();
 
-  ctx.lineTo(canvas.width, canvas.height / 2);
+  // Playhead rosso
+  const percent = audio.currentTime / audio.duration;
+  const playheadX = percent * canvas.width;
+  ctx.strokeStyle = 'red';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(playheadX, 0);
+  ctx.lineTo(playheadX, canvas.height);
   ctx.stroke();
 }
+
+// FUNZIONE PER SEEK TRAMITE CLICK O DRAG
+function seek(e) {
+  const rect = canvas.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  let percent = (clientX - rect.left) / rect.width;
+  percent = Math.max(0, Math.min(1, percent));
+  audio.currentTime = percent * audio.duration;
+}
+
+// Drag e click interattivo
+canvas.addEventListener('mousedown', () => isDragging = true);
+canvas.addEventListener('mousemove', e => { if(isDragging) seek(e); });
+canvas.addEventListener('mouseup', () => isDragging = false);
+
+canvas.addEventListener('touchstart', () => isDragging = true);
+canvas.addEventListener('touchmove', e => { if(isDragging) seek(e); });
+canvas.addEventListener('touchend', () => isDragging = false);
