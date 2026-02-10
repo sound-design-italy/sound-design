@@ -641,3 +641,57 @@ main {
   box-shadow: 0 0 30px rgba(0,255,240,0.4);
   transition: transform 0.2s, box-shadow 0.2s;
 }
+
+/* CENTRA TUTTO ORIZZONTALMENTE NEL HERO */
+.hero-content {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 700px;
+  width: 90%;          /* aggiunto per adattarsi allo schermo piccolo */
+  text-align: center;
+  color: #00fff0;
+}
+
+/* Bottone già inline-block, quindi con text-align: center rimane centrato */
+.hero-btn {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 16px 32px;
+  background: linear-gradient(90deg, #00fff0, #00b3a8);
+  color: #050505;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 500;
+  box-shadow: 0 0 30px rgba(0,255,240,0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* ====== VERSIONE MOBILE ====== */
+@media (max-width: 600px) {
+  .hero-content {
+    bottom: 20px;       /* più spazio sopra il bordo */
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 95%;     /* prende quasi tutta la larghezza dello schermo */
+    width: 95%;
+    padding: 0 10px;   /* un po’ di padding interno */
+    font-size: 0.9rem;  /* riduce leggermente i testi per stare meglio */
+  }
+
+  .hero-content h1 {
+    font-size: clamp(1.8rem, 6vw, 2.5rem); /* riduce il titolo su mobile */
+    line-height: 1.1;
+  }
+
+  .hero-content p {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .hero-btn {
+    padding: 12px 24px;
+    font-size: 0.8rem;
+  }
+}
