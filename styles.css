@@ -560,3 +560,8 @@ a {
     transform: translateX(0);
   }
 }
+
+/* ======= OFFSET PER HEADER FIXED ======= */
+main {
+  padding-top: 120px; /* altezza stimata dell'header */
+}
