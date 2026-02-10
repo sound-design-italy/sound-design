@@ -361,3 +361,14 @@ a {
   transform: translateY(-2px);
   box-shadow: 0 0 40px rgba(0,255,240,0.6);
 }
+
+/* ============================
+   HERO VIDEO - VERSIONE DESKTOP
+============================ */
+@media (min-width: 1024px) {
+  .product-hero video {
+    object-fit: contain;      /* mostra tutto il soggetto senza tagli */
+    object-position: center;  /* centra il video orizzontalmente e verticalmente */
+    background: #050505;      /* sfondo nero per le “strisce” */
+  }
+}
