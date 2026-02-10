@@ -43,7 +43,7 @@ function initMenu() {
         link.style.animation = 'none';  // reset
         link.offsetHeight;              // trigger reflow
         link.style.animation = `neonIn 0.6s ease forwards`;
-        link.style.animationDelay = `${index * 0.12}s`;
+        link.style.animationDelay = `${index * 0.25}s`;
       });
     } else {
       resetLinks();
