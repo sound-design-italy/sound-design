@@ -50,3 +50,15 @@ function initMenu() {
     });
   }
 }
+
+// Pack card interaction
+document.querySelectorAll('.pack-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const overlay = document.querySelector('.page-overlay');
+    overlay.classList.add('active');
+
+    setTimeout(() => {
+      window.location.href = card.dataset.link;
+    }, 600);
+  });
+});
