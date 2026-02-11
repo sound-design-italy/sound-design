@@ -1,5 +1,6 @@
 /* ============================
-   GLOBAL
+   GLOBAL STYLES
+   Base per tutto il sito: box-sizing, font, colori, overflow, sticky footer
 ============================ */
 * {
   box-sizing: border-box;
@@ -20,7 +21,7 @@ html, body {
   min-height: 100vh;
 }
 
-/* LINKS */
+/* LINKS: stile base link */
 a {
   color: inherit;
   text-decoration: none;
@@ -28,6 +29,7 @@ a {
 
 /* ============================
    HEADER / MENU
+   Gestione header fisso, logo, hamburger e menu laterale
 ============================ */
 .header {
   position: fixed;
@@ -47,10 +49,16 @@ a {
   color: #00fff0;
 }
 
+.logo {
+  flex: 1;
+  text-align: center;
+}
+
 .header-right {
   display: flex;
   align-items: center;
   gap: 24px;
+  flex: 0;
 }
 
 .lang {
@@ -85,7 +93,7 @@ a {
   opacity: 0;
 }
 
-/* MENU */
+/* MENU: lato destro, animazione apertura chiusura */
 .menu {
   position: fixed;
   top: 0;
@@ -120,12 +128,13 @@ a {
 
 /* ============================
    SOUND PACKS PAGE
+   Gestione pagina moduli, titoli, sottotitoli, griglia e cards
 ============================ */
 .packs-page {
   padding: 160px 48px 120px;
 }
 
-/* TITOLO */
+/* TITOLO PRINCIPALE */
 .page-title {
   font-size: clamp(2.5rem, 4vw, 3.5rem);
   font-weight: 400;
@@ -133,7 +142,7 @@ a {
   text-align: center;
 }
 
-/* SOTTOTITOLO */
+/* SOTTOTITOLO / descrizione pagina moduli */
 .page-subtitle {
   margin-bottom: 80px;
   font-size: 1.05rem;
@@ -145,20 +154,20 @@ a {
   margin-right: auto;
 }
 
-/* GRID */
+/* GRID: layout responsive moduli */
 .packs-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 64px;
 }
 
-/* CARD */
+/* CARD: struttura singolo modulo */
 .pack-card {
   cursor: pointer;
   position: relative;
 }
 
-/* MEDIA */
+/* MEDIA: video del modulo e neon frame */
 .media {
   position: relative;
   overflow: hidden;
@@ -191,7 +200,7 @@ a {
     inset 0 0 12px rgba(0,255,240,0.2);
 }
 
-/* INFO */
+/* INFO CARD: titolo, descrizione, prezzo, bottone access */
 .info {
   margin-top: 24px;
 }
@@ -213,28 +222,31 @@ a {
   letter-spacing: 0.1em;
 }
 
-/* OVERLAY TRANSITION */
-.page-overlay {
-  position: fixed;
-  inset: 0;
-  background: #050505;
-  transform: translateY(100%);
-  transition: transform 0.6s cubic-bezier(.7,0,.2,1);
-  z-index: 20;
+.access-btn {
+  display: inline-block;
+  padding: 6px 24px;
+  background: linear-gradient(90deg, #00fff0, #00b3a8);
+  color: #050505;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.page-overlay.active {
-  transform: translateY(0);
+.access-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(0,255,240,0.4);
 }
 
 /* ============================
    PRODUCT PAGE
+   Gestione singolo prodotto, descrizione, audio player e bottoni
 ============================ */
 .product-page {
   padding-top: 120px;
 }
 
-/* HERO */
+/* HERO PRODOTTO: video e overlay */
 .product-hero {
   position: relative;
   height: clamp(320px, 60vh, 520px);
@@ -247,100 +259,6 @@ a {
   object-fit: cover;
 }
 
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(5,5,5,0.2), rgba(5,5,5,0.95));
-}
-
-.hero-content {
-  position: absolute;
-  bottom: 32px;
-  left: 24px;
-  right: 24px;
-  max-width: 600px;
-}
-
-.hero-content h1 {
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 400;
-}
-
-.hero-content p {
-  opacity: 0.6;
-  margin: 16px 0;
-}
-
-.hero-content .price {
-  letter-spacing: 0.2em;
-  font-size: 0.9rem;
-}
-
-/* PRODUCT CARD */
-.product-content {
-  padding: 48px 16px 96px;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.product-card {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(0,255,240,0.15);
-  border-radius: 16px;
-  padding: 32px;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 0 40px rgba(0,255,240,0.08),
-              inset 0 0 20px rgba(0,255,240,0.05);
-}
-
-/* AUDIO PLAYER PRO */
-.audio-player-pro {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 48px;
-}
-
-.audio-player-pro button {
-  background: transparent;
-  border: 1px solid rgba(0,255,240,0.6);
-  color: #00fff0;
-  padding: 10px 18px;
-  letter-spacing: 0.15em;
-  cursor: pointer;
-}
-
-.progress-container {
-  position: relative;
-  height: 2px;
-  background: rgba(255,255,255,0.15);
-  overflow: hidden;
-  border-radius: 1px;
-}
-
-.progress-bar {
-  height: 100%;
-  width: 0%;
-  background: #00fff0;
-  box-shadow: 0 0 12px #00fff0;
-  transition: width 0.1s linear;
-}
-
-.audio-player-pro .time {
-  font-size: 0.7rem;
-  letter-spacing: 0.2em;
-  opacity: 0.6;
-}
-
-@media (max-width: 600px) {
-  .audio-player-pro {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-}
-
-/* DESCRIPTION */
 .product-description h2 {
   font-weight: 400;
   margin-bottom: 16px;
@@ -362,7 +280,6 @@ a {
   opacity: 0.8;
 }
 
-/* BUY BUTTON */
 .buy-btn {
   width: 100%;
   margin-top: 48px;
@@ -382,19 +299,60 @@ a {
   box-shadow: 0 0 40px rgba(0,255,240,0.6);
 }
 
-/* ============================
-   HERO VIDEO - VERSIONE DESKTOP
-============================ */
-@media (min-width: 1024px) {
-  .product-hero video {
-    object-fit: contain;
-    object-position: center;
-    background: #050505;
-  }
+/* AUDIO PLAYER PRO */
+.audio-player-pro {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.audio-player-pro button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid rgba(0,255,240,0.6);
+  color: #00fff0;
+  cursor: pointer;
+}
+
+.audio-player-pro #waveform {
+  flex: 1;
+  height: 60px;
+  border-radius: 8px;
+  background: #111;
+  cursor: pointer;
+}
+
+.audio-player-pro .time {
+  width: 50px;
+  text-align: right;
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+/* OVERLAY TRANSITION */
+.page-overlay {
+  position: fixed;
+  inset: 0;
+  background: #050505;
+  transform: translateY(100%);
+  transition: transform 0.6s cubic-bezier(.7,0,.2,1);
+  z-index: 20;
+}
+
+.page-overlay.active {
+  transform: translateY(0);
 }
 
 /* ============================
    HOME HERO
+   Hero principale, testo centrato, video background
 ============================ */
 .home-hero {
   position: relative;
@@ -408,13 +366,6 @@ a {
   object-fit: cover;
 }
 
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(5,5,5,0.2), rgba(5,5,5,0.95));
-}
-
-/* CONTENUTO HERO */
 .hero-content {
   position: absolute;
   bottom: 40px;
@@ -426,7 +377,6 @@ a {
   color: #00fff0;
 }
 
-/* TESTO PRINCIPALE */
 .hero-main {
   font-size: clamp(1.6rem, 2.5vw, 2rem);
   line-height: 1.4;
@@ -435,7 +385,6 @@ a {
   margin-bottom: 24px;
 }
 
-/* BOTTONE */
 .hero-btn {
   display: inline-block;
   margin-top: 16px;
@@ -456,6 +405,7 @@ a {
 
 /* ============================
    HOME PRODUCTS GRID
+   Layout griglia prodotti in homepage
 ============================ */
 .home-products {
   padding: 120px 48px;
@@ -474,7 +424,6 @@ a {
   gap: 48px;
 }
 
-/* PRODUCT CARD */
 .product-card {
   background: rgba(255,255,255,0.02);
   border: 1px solid rgba(0,255,240,0.15);
@@ -489,87 +438,40 @@ a {
   box-shadow: 0 0 40px rgba(0,255,240,0.4);
 }
 
-.product-card .media {
-  position: relative;
-  overflow: hidden;
-  height: 180px;
-}
-
-.product-card .media video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s;
-}
-
-.product-card:hover video {
-  transform: scale(1.05);
-}
-
-.product-card .neon {
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgba(0,255,240,0);
-  transition: border 0.3s, box-shadow 0.3s;
-}
-
-.product-card:hover .neon {
-  border: 1px solid rgba(0,255,240,0.6);
-  box-shadow: 0 0 12px rgba(0,255,240,0.4), inset 0 0 12px rgba(0,255,240,0.2);
-}
-
-.product-card .info {
-  padding: 16px;
-}
-
-.product-card h3 {
-  font-weight: 400;
-  margin-bottom: 8px;
-}
-
-.product-card p {
-  opacity: 0.6;
-  font-size: 0.9rem;
-  margin-bottom: 12px;
-}
-
-.price {
-  letter-spacing: 0.1em;
-  font-size: 0.85rem;
-  display: inline-block;
-  margin-bottom: 16px;
-}
-
-.access-btn {
-  display: inline-block;
-  padding: 6px 24px; /* ALTEZZA BOTTONE */
-  background: linear-gradient(90deg, #00fff0, #00b3a8);
-  color: #050505;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.access-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 30px rgba(0,255,240,0.4);
-}
-
-/* MOBILE */
-@media(max-width: 600px) {
+/* RESPONSIVE MOBILE */
+@media (max-width: 600px) {
   .hero-content {
-    bottom: 24px;
-    left: 16px;
-    right: 16px;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 95%;
+    width: 95%;
+    padding: 0 10px;
+    font-size: 0.9rem;
   }
+
+  .hero-content h1 {
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+    line-height: 1.1;
+  }
+
+  .hero-content p {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .hero-btn {
+    padding: 12px 24px;
+    font-size: 0.8rem;
+  }
+
   .home-products {
     padding: 80px 16px;
   }
 }
 
 /* ============================
-   NEON MENU ANIMATION
+   ANIMAZIONE NEON MENU
 ============================ */
 @keyframes neonIn {
   0% {
@@ -584,13 +486,13 @@ a {
   }
 }
 
-/* ======= OFFSET PER HEADER FIXED ======= */
+/* ===== OFFSET PER HEADER FIXED ===== */
 main {
   flex: 1;            /* fa da “spazio flessibile” tra header e footer */
   padding-top: 120px; /* altezza stimata dell'header */
 }
 
-/* ======= FOOTER ======= */
+/* ===== FOOTER ===== */
 .footer {
   background: #050505;
   color: #00fff0;
@@ -604,144 +506,11 @@ main {
   height: 60px;
   background: rgba(5,5,5,0.05);
   border-radius: 4px;
-  margin: 8px 0; /* spazio tra testo e barra */
+  margin: 8px 0;
   display: block;
 }
 
-/* STILE LINEA FORMA D'ONDA */
 .audio-player-pro canvas {
   border: 1px solid rgba(0,255,240,0.2);
   box-shadow: 0 0 10px rgba(0,255,240,0.3);
 }
-
-/* HEADER CENTRATO */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-}
-
-.logo {
-  flex: 1;
-  text-align: center;
-}
-
-.header-right {
-  flex: 0;
-}
-
-.logo img {
-  height: 60px; /* puoi modificare l'altezza del logo */
-}
-
-/* CENTRA TUTTO ORIZZONTALMENTE NEL HERO */
-.hero-content {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%); /* centra il contenuto orizzontalmente */
-  max-width: 700px;
-  text-align: center; /* centra testi e bottoni */
-  color: #00fff0;
-}
-
-/* Bottone già inline-block, quindi con text-align: center rimane centrato */
-.hero-btn {
-  display: inline-block; /* importante per il centraggio */
-  margin-top: 24px;
-  padding: 16px 32px;
-  background: linear-gradient(90deg, #00fff0, #00b3a8);
-  color: #050505;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  font-weight: 500;
-  box-shadow: 0 0 30px rgba(0,255,240,0.4);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-/* CENTRA TUTTO ORIZZONTALMENTE NEL HERO */
-.hero-content {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  max-width: 700px;
-  width: 90%;          /* aggiunto per adattarsi allo schermo piccolo */
-  text-align: center;
-  color: #00fff0;
-}
-
-/* Bottone già inline-block, quindi con text-align: center rimane centrato */
-.hero-btn {
-  display: inline-block;
-  margin-top: 24px;
-  padding: 16px 32px;
-  background: linear-gradient(90deg, #00fff0, #00b3a8);
-  color: #050505;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  font-weight: 500;
-  box-shadow: 0 0 30px rgba(0,255,240,0.4);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-/* ====== VERSIONE MOBILE ====== */
-@media (max-width: 600px) {
-  .hero-content {
-    bottom: 20px;       /* più spazio sopra il bordo */
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 95%;     /* prende quasi tutta la larghezza dello schermo */
-    width: 95%;
-    padding: 0 10px;   /* un po’ di padding interno */
-    font-size: 0.9rem;  /* riduce leggermente i testi per stare meglio */
-  }
-
-  .hero-content h1 {
-    font-size: clamp(1.8rem, 6vw, 2.5rem); /* riduce il titolo su mobile */
-    line-height: 1.1;
-  }
-
-  .hero-content p {
-    font-size: 0.85rem;
-    line-height: 1.4;
-  }
-
-  .hero-btn {
-    padding: 12px 24px;
-    font-size: 0.8rem;
-  }
-}
-
-.audio-player-pro {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.audio-player-pro button {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.audio-player-pro #waveform {
-  flex: 1;
-  height: 60px;
-  border-radius: 8px;
-  background: #111;
-  cursor: pointer;
-}
-
-.audio-player-pro .time {
-  width: 50px;
-  text-align: right;
-  font-size: 0.8rem;
-  opacity: 0.6;
-}
-
