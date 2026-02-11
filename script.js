@@ -83,8 +83,8 @@ if (packVideos.length) {
   if (isDesktop) {
     // Desktop: play on hover, pause on mouse leave
     packVideos.forEach(video => {
-      video.pause();            // fermo di default
-      video.muted = true;       // assicura autoplay senza blocchi
+      video.pause();        // fermo di default
+      video.muted = true;   // necessario per play senza click
       video.addEventListener('mouseenter', () => {
         video.currentTime = 0;  // riparte dall'inizio
         video.play().catch(e => console.log('Play failed:', e));
