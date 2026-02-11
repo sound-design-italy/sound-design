@@ -208,6 +208,16 @@ a {
     inset 0 0 12px rgba(0,255,240,0.2);
 }
 
+@media (min-width: 1024px) {
+  .packs-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* massimo 4 per riga */
+    gap: 32px;                              /* spazio tra le card */
+    max-width: 1200px;                      /* larghezza massima della griglia */
+    margin: 0 auto;                         /* centra la griglia nello schermo */
+  }
+}
+
 /* INFO */
 .info {
   margin-top: 24px;

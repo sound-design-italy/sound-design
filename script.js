@@ -73,6 +73,40 @@ document.querySelectorAll('.pack-card').forEach(card => {
 });
 
 // ============================
+// VIDEO PLAY ON HOVER / VIEWPORT
+// ============================
+const packVideos = document.querySelectorAll('.packs-page .pack-card video');
+
+if (packVideos.length) {
+  const isDesktop = window.innerWidth >= 1024;
+
+  if (isDesktop) {
+    // Desktop: play on hover, pause on mouse leave
+    packVideos.forEach(video => {
+      video.pause();
+      video.addEventListener('mouseenter', () => video.play());
+      video.addEventListener('mouseleave', () => video.pause());
+    });
+  } else {
+    // Mobile: play/pause when enters viewport
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.play();
+        } else {
+          entry.target.pause();
+        }
+      });
+    }, { threshold: 0.5 }); // metà video visibile
+
+    packVideos.forEach(video => {
+      video.pause();
+      observer.observe(video);
+    });
+  }
+}
+
+// ============================
 // AUDIO PLAYER PRO (WHATSAPP STYLE)
 // ============================
 const audio = document.getElementById('audio');
@@ -95,34 +129,38 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 // Play / Pause
-playBtn.addEventListener('click', () => {
-  if (audio.paused) {
-    audio.play();
-    playBtn.textContent = '⏸';
-    if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      source = audioCtx.createMediaElementSource(audio);
-      analyser = audioCtx.createAnalyser();
-      source.connect(analyser);
-      analyser.connect(audioCtx.destination);
-      analyser.fftSize = 2048;
-      dataArray = new Uint8Array(analyser.frequencyBinCount);
-      drawWaveform();
+if (playBtn && audio) {
+  playBtn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play();
+      playBtn.textContent = '⏸';
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        source = audioCtx.createMediaElementSource(audio);
+        analyser = audioCtx.createAnalyser();
+        source.connect(analyser);
+        analyser.connect(audioCtx.destination);
+        analyser.fftSize = 2048;
+        dataArray = new Uint8Array(analyser.frequencyBinCount);
+        drawWaveform();
+      }
+    } else {
+      audio.pause();
+      playBtn.textContent = '▶';
     }
-  } else {
-    audio.pause();
-    playBtn.textContent = '▶';
-  }
-});
+  });
+}
 
 // Aggiorna tempo
-audio.addEventListener('timeupdate', () => {
-  const minutes = Math.floor(audio.currentTime / 60);
-  const seconds = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
-  if (timeEl) timeEl.textContent = `${minutes}:${seconds}`;
-});
+if (audio) {
+  audio.addEventListener('timeupdate', () => {
+    const minutes = Math.floor(audio.currentTime / 60);
+    const seconds = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
+    if (timeEl) timeEl.textContent = `${minutes}:${seconds}`;
+  });
+}
 
-// Disegna waveform con fill sotto la linea
+// Disegna waveform
 function drawWaveform() {
   animationId = requestAnimationFrame(drawWaveform);
 
@@ -134,10 +172,8 @@ function drawWaveform() {
   const h = canvas.height;
   ctx.clearRect(0, 0, w, h);
 
-  // Calcolo percentuale playhead
   const percent = audio.currentTime / audio.duration;
 
-  // Disegna forma d'onda
   ctx.beginPath();
   ctx.moveTo(0, h/2);
   for (let i = 0; i < dataArray.length; i++) {
@@ -148,7 +184,6 @@ function drawWaveform() {
   ctx.lineTo(w, h/2);
   ctx.closePath();
 
-  // Fill sotto la linea
   const gradient = ctx.createLinearGradient(0, 0, w, 0);
   gradient.addColorStop(0, '#00fff0');
   gradient.addColorStop(percent, '#00fff0');
@@ -157,7 +192,6 @@ function drawWaveform() {
   ctx.fillStyle = gradient;
   ctx.fill();
 
-  // Outline waveform
   ctx.strokeStyle = '#00fff0';
   ctx.lineWidth = 2;
   ctx.stroke();
@@ -173,11 +207,13 @@ function seek(e) {
 }
 
 // Drag e click interattivo
-canvas.addEventListener('mousedown', e => { isDragging = true; seek(e); });
-canvas.addEventListener('mousemove', e => { if (isDragging) seek(e); });
-canvas.addEventListener('mouseup', () => isDragging = false);
-canvas.addEventListener('mouseleave', () => isDragging = false);
+if (canvas) {
+  canvas.addEventListener('mousedown', e => { isDragging = true; seek(e); });
+  canvas.addEventListener('mousemove', e => { if (isDragging) seek(e); });
+  canvas.addEventListener('mouseup', () => isDragging = false);
+  canvas.addEventListener('mouseleave', () => isDragging = false);
 
-canvas.addEventListener('touchstart', e => { isDragging = true; seek(e); });
-canvas.addEventListener('touchmove', e => { if (isDragging) seek(e); });
-canvas.addEventListener('touchend', () => isDragging = false);
+  canvas.addEventListener('touchstart', e => { isDragging = true; seek(e); });
+  canvas.addEventListener('touchmove', e => { if (isDragging) seek(e); });
+  canvas.addEventListener('touchend', () => isDragging = false);
+}
