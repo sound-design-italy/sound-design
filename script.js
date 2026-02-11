@@ -83,21 +83,26 @@ if (packVideos.length) {
   if (isDesktop) {
     // Desktop: play on hover, pause on mouse leave
     packVideos.forEach(video => {
-      video.pause();
-      video.addEventListener('mouseenter', () => video.play());
+      video.pause();            // fermo di default
+      video.muted = true;       // assicura autoplay senza blocchi
+      video.addEventListener('mouseenter', () => {
+        video.currentTime = 0;  // riparte dall'inizio
+        video.play().catch(e => console.log('Play failed:', e));
+      });
       video.addEventListener('mouseleave', () => video.pause());
     });
   } else {
-    // Mobile: play/pause when enters viewport
+    // Mobile: play/pause quando entra nel viewport
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.play();
+          entry.target.muted = true;
+          entry.target.play().catch(e => console.log('Play failed:', e));
         } else {
           entry.target.pause();
         }
       });
-    }, { threshold: 0.5 }); // metà video visibile
+    }, { threshold: 0.5 });
 
     packVideos.forEach(video => {
       video.pause();
