@@ -5,6 +5,7 @@
   <title>Epic Trailer Pack – CYBERSOUND</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="styles.css" />
+
   <style>
     /* ===============================
        AUDIO PLAYER MESSAGGIO WHATSAPP
@@ -19,7 +20,6 @@
       padding: 12px 16px;
       border-radius: 16px;
       box-shadow: 0 0 10px rgba(0,255,240,0.2);
-      font-family: sans-serif;
       margin: 20px 0;
     }
 
@@ -52,6 +52,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- HEADER DINAMICO -->
@@ -66,7 +67,7 @@
 
       <div class="hero-content">
         <h1>Epic Trailer Pack</h1>
-        <p>Cinematic impacts, risers &amp; hits for modern trailers</p>
+        <p>Cinematic impacts, risers & hits for modern trailers</p>
         <span class="price">€49</span>
       </div>
     </section>
@@ -75,7 +76,7 @@
     <section class="product-content">
       <div class="product-card">
 
-        <!-- AUDIO PLAYER PRO -->
+        <!-- AUDIO PLAYER -->
         <div class="audio-player-pro">
           <button id="playBtn">▶</button>
           <canvas id="waveform"></canvas>
@@ -95,7 +96,7 @@
           <ul class="features">
             <li>✔ 120+ cinematic sounds</li>
             <li>✔ 24bit / 96kHz WAV</li>
-            <li>✔ Trailer &amp; game ready</li>
+            <li>✔ Trailer & game ready</li>
             <li>✔ Royalty-free</li>
           </ul>
         </div>
@@ -111,131 +112,11 @@
   <!-- FOOTER DINAMICO -->
   <div id="footer"></div>
 
-  <!-- OVERLAY PER TRANSIZIONI -->
+  <!-- OVERLAY TRANSIZIONE -->
   <div class="page-overlay"></div>
 
-  <!-- SCRIPT -->
-  <script>
-    // ============================
-    // HEADER & FOOTER DINAMICI
-    // ============================
-    fetch('header.html')
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById('header').innerHTML = html;
-      });
-
-    fetch('footer.html')
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById('footer').innerHTML = html;
-      });
-
-    // ============================
-    // AUDIO PLAYER INTERATTIVO
-    // ============================
-    const audio = document.getElementById('audio');
-    const playBtn = document.getElementById('playBtn');
-    const canvas = document.getElementById('waveform');
-    const ctx = canvas.getContext('2d');
-    const timeEl = document.getElementById('time');
-
-    let audioCtx, source, analyser, dataArray;
-    let animationId;
-    let isDragging = false;
-
-    // Resize canvas
-    function resizeCanvas() {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    // Play/Pause
-    playBtn.addEventListener('click', () => {
-      if(audio.paused){
-        audio.play();
-        playBtn.textContent = '⏸';
-        if(!audioCtx){
-          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          source = audioCtx.createMediaElementSource(audio);
-          analyser = audioCtx.createAnalyser();
-          source.connect(analyser);
-          analyser.connect(audioCtx.destination);
-          analyser.fftSize = 2048;
-          dataArray = new Uint8Array(analyser.frequencyBinCount);
-          drawWaveform();
-        }
-      } else {
-        audio.pause();
-        playBtn.textContent = '▶';
-      }
-    });
-
-    // Aggiorna tempo
-    audio.addEventListener('timeupdate', updateTime);
-    function updateTime() {
-      const minutes = Math.floor(audio.currentTime / 60);
-      const seconds = Math.floor(audio.currentTime % 60).toString().padStart(2,'0');
-      timeEl.textContent = `${minutes}:${seconds}`;
-    }
-
-    // Disegna waveform
-    function drawWaveform(){
-      animationId = requestAnimationFrame(drawWaveform);
-      analyser.getByteTimeDomainData(dataArray);
-
-      const w = canvas.width;
-      const h = canvas.height;
-      ctx.clearRect(0,0,w,h);
-
-      // Linea waveform
-      ctx.beginPath();
-      ctx.moveTo(0,h/2);
-      for(let i=0;i<dataArray.length;i++){
-        const x = (i/dataArray.length)*w;
-        const y = (dataArray[i]/128.0)*h/2;
-        ctx.lineTo(x,y);
-      }
-      ctx.lineTo(w,h/2);
-      ctx.closePath();
-
-      // Fill waveform sotto linea
-      const percent = audio.currentTime/audio.duration;
-      const gradient = ctx.createLinearGradient(0,0,w,0);
-      gradient.addColorStop(0, '#00fff0');
-      gradient.addColorStop(percent, '#00fff0');
-      gradient.addColorStop(percent, '#333');
-      gradient.addColorStop(1, '#333');
-      ctx.fillStyle = gradient;
-      ctx.fill();
-
-      // Outline
-      ctx.strokeStyle = '#00fff0';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
-
-    // Funzione seek
-    function seek(e){
-      const rect = canvas.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      let percent = (clientX - rect.left)/rect.width;
-      percent = Math.max(0, Math.min(1, percent));
-      audio.currentTime = percent*audio.duration;
-    }
-
-    // Drag/click interattivo
-    canvas.addEventListener('mousedown', e => { isDragging = true; seek(e); });
-    canvas.addEventListener('mousemove', e => { if(isDragging) seek(e); });
-    canvas.addEventListener('mouseup', () => isDragging = false);
-    canvas.addEventListener('mouseleave', () => isDragging = false);
-
-    canvas.addEventListener('touchstart', e => { isDragging = true; seek(e); });
-    canvas.addEventListener('touchmove', e => { if(isDragging) seek(e); });
-    canvas.addEventListener('touchend', () => isDragging = false);
-  </script>
+  <!-- SCRIPT PRINCIPALE -->
+  <script src="script.js"></script>
 
 </body>
 </html>
