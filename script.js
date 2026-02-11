@@ -1,9 +1,3 @@
-// RESET OVERLAY ALL'APERTURA DELLA PAGINA
-window.addEventListener('load', () => {
-  const overlay = document.querySelector('.page-overlay');
-  if (overlay) overlay.classList.remove('active');
-});
-
 // ============================
 // LOAD HEADER & FOOTER
 // ============================
@@ -69,8 +63,6 @@ function initMenu() {
 // ============================
 document.querySelectorAll('.pack-card').forEach(card => {
   card.addEventListener('click', () => {
-    const overlay = document.querySelector('.page-overlay');
-    if (overlay) overlay.classList.add('active');
 
     setTimeout(() => {
       window.location.href = card.dataset.link;
