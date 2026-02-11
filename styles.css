@@ -85,6 +85,23 @@ a {
   opacity: 0;
 }
 
+/* ============================
+   HEADER BOTTOM LINE
+============================ */
+.header::after {
+  content: "";
+  display: block;
+  width: 80%;           /* lascia margini laterali */
+  height: 1px;          /* spessore linea */
+  background: #fff;     /* colore linea */
+  margin: 0 auto;       /* centra la linea */
+  position: absolute;
+  bottom: 0;            /* posizionata al bordo basso dell’header */
+  left: 0;
+  right: 0;
+  opacity: 0.4;         /* leggermente trasparente */
+}
+
 /* MENU */
 .menu {
   position: fixed;
