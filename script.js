@@ -81,15 +81,27 @@ if (packVideos.length) {
   const isDesktop = window.innerWidth >= 1024;
 
   if (isDesktop) {
-    // Desktop: play on hover, pause on mouse leave
+    // Desktop: play on hover sulla card
     packVideos.forEach(video => {
-      video.pause();        // fermo di default
-      video.muted = true;   // necessario per play senza click
-      video.addEventListener('mouseenter', () => {
-        video.currentTime = 0;  // riparte dall'inizio
-        video.play().catch(e => console.log('Play failed:', e));
+      video.pause();           // fermo di default
+      video.muted = true;      // necessario per play senza click
+      video.preload = "auto";  // forza il caricamento
+
+      const card = video.closest('.pack-card');
+      if (!card) return;
+
+      card.addEventListener('mouseenter', async () => {
+        try {
+          video.currentTime = 0;
+          await video.play();
+        } catch (e) {
+          console.log('Play failed:', e);
+        }
       });
-      video.addEventListener('mouseleave', () => video.pause());
+
+      card.addEventListener('mouseleave', () => {
+        video.pause();
+      });
     });
   } else {
     // Mobile: play/pause quando entra nel viewport
