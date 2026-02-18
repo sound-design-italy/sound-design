@@ -617,14 +617,6 @@ main {
   padding-top: 120px; /* altezza stimata dell'header */
 }
 
-/* ======= FOOTER ======= */
-.footer {
-  background: #050505;
-  color: #00fff0;
-  text-align: center;
-  padding: 24px 0;
-}
-
 /* CANVAS FORMA D'ONDA */
 #waveform {
   width: 100%;
@@ -770,4 +762,50 @@ main {
   text-align: right;
   font-size: 0.8rem;
   opacity: 0.6;
+}
+
+/* ======= FOOTER ======= */
+.footer {
+  background: #050505;
+  padding: 32px 0 24px;
+  text-align: center;
+  color: #00fff0;
+  margin-top: auto; /* mantiene il footer in fondo */
+}
+
+/* linea superiore come header */
+.footer-line {
+  width: 80%;
+  height: 1px;
+  background: #fff;
+  opacity: 0.4;
+  margin: 0 auto 24px;
+}
+
+/* links */
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.footer-links a {
+  opacity: 0.6;
+  transition: opacity 0.3s ease, text-shadow 0.3s ease;
+}
+
+.footer-links a:hover {
+  opacity: 1;
+  text-shadow: 0 0 8px #00fff0;
+}
+
+/* mobile */
+@media (max-width: 600px) {
+  .footer-links {
+    flex-direction: column;
+    gap: 12px;
+  }
 }
