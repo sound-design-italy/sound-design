@@ -821,3 +821,26 @@ main {
 .pack-card .info .price {
   text-align: center; /* opzionale, se vuoi centrare anche testo e prezzo */
 }
+
+/* ============================
+   ALLINEAMENTO BOTTONI GET DESKTOP
+============================ */
+@media (min-width: 1024px) {
+  /* Assicura che tutte le card della griglia abbiano la stessa altezza */
+  .packs-grid {
+    align-items: stretch;
+  }
+
+  /* Imposta le card come contenitore verticale flessibile */
+  .pack-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* bottone in fondo */
+    height: 100%;
+  }
+
+  /* Mantieni centrato il contenuto dentro .info */
+  .pack-card .info {
+    text-align: center;
+  }
+}
