@@ -809,3 +809,15 @@ main {
     gap: 12px;
   }
 }
+
+/* GET CENTRATO */
+.pack-card .info {
+  padding: 16px;
+  text-align: center; /* CENTRA TUTTO ORIZZONTALMENTE */
+}
+
+.pack-card .info h2,
+.pack-card .info p,
+.pack-card .info .price {
+  text-align: center; /* opzionale, se vuoi centrare anche testo e prezzo */
+}
