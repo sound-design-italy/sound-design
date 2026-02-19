@@ -18,10 +18,10 @@ fetch('footer.html')
   });
 
 // ============================
-// FIRESTORE CONFIG
+// FIREBASE CONFIG
 // ============================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDavwOB1jpD2B-Z-NTZlFJ3kjM9L7kdEYA",
@@ -36,20 +36,18 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore();
 
 // ============================
-// LOAD MODULE CARDS FROM FIRESTORE
+// LOAD MODULE CARDS FROM FIRESTORE (LIVE)
 // ============================
-async function loadCards() {
-  try {
-    const querySnapshot = await getDocs(collection(db, "prodotti"));
-    const data = [];
-    querySnapshot.forEach(docSnap => {
-      data.push(docSnap.data());
-    });
+function loadCards() {
+  const grid = document.querySelector('.packs-grid');
+  grid.innerHTML = '';
 
-    const grid = document.querySelector('.packs-grid');
-    grid.innerHTML = ''; // svuota card statiche
+  // onSnapshot per aggiornamento live
+  onSnapshot(collection(db, "prodotti"), snapshot => {
+    grid.innerHTML = ''; // reset
+    snapshot.forEach(docSnap => {
+      const item = docSnap.data();
 
-    data.forEach(item => {
       const card = document.createElement('div');
       card.className = 'pack-card';
       card.dataset.link = item.LinkPagina;
@@ -73,12 +71,9 @@ async function loadCards() {
       grid.appendChild(card);
     });
 
-    // Hover / play video
+    // Hover/play video
     initPackVideos();
-
-  } catch (err) {
-    console.error('Errore caricamento Firestore:', err);
-  }
+  }, err => console.error('Errore Firestore live:', err));
 }
 
 // ============================
