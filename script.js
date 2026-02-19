@@ -18,6 +18,97 @@ fetch('footer.html')
   });
 
 // ============================
+// LOAD MODULE CARDS FROM CSV
+// ============================
+async function loadCards() {
+  const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwNww5YZ792c4gk3GfKMafr0-BcdOIchqCKp1MxPuZ2bvV4IaiLjvHcZ4osLvq3WIh7qvNqds_Crsk/pub?output=csv';
+
+  try {
+    const res = await fetch(csvUrl);
+    const text = await res.text();
+
+    // Parse CSV in array di oggetti
+    const lines = text.split('\n').filter(Boolean);
+    const headers = lines[0].split(',');
+    const data = lines.slice(1).map(line => {
+      const values = line.split(',');
+      const obj = {};
+      headers.forEach((h, i) => obj[h.trim()] = values[i].trim());
+      return obj;
+    });
+
+    const grid = document.querySelector('.packs-grid');
+    grid.innerHTML = ''; // svuota card statiche
+
+    data.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'pack-card';
+      card.dataset.link = item.Link;
+
+      card.innerHTML = `
+        <div class="media">
+          <video src="${item.MediaURL}" muted loop playsinline></video>
+          <span class="neon"></span>
+        </div>
+        <div class="info">
+          <h2>${item.Title}</h2>
+          <p>${item.Description}</p>
+          <a class="btn-get-terminal" href="${item.Link}">GET</a>
+        </div>
+      `;
+
+      card.addEventListener('click', () => {
+        setTimeout(() => window.location.href = item.Link, 600);
+      });
+
+      grid.appendChild(card);
+    });
+
+    // Riapplia hover/play per i video
+    initPackVideos();
+
+  } catch (err) {
+    console.error('Errore caricamento CSV:', err);
+  }
+}
+
+// Funzione separata per gestire video hover/play
+function initPackVideos() {
+  const packVideos = document.querySelectorAll('.packs-page .pack-card video');
+
+  if (!packVideos.length) return;
+
+  const isDesktop = window.innerWidth >= 1024;
+
+  if (isDesktop) {
+    packVideos.forEach(video => {
+      video.pause();
+      video.muted = true;
+      video.preload = "auto";
+
+      const card = video.closest('.pack-card');
+      card.addEventListener('mouseenter', async () => {
+        try { video.currentTime = 0; await video.play(); } 
+        catch(e){ console.log('Play failed:', e); }
+      });
+      card.addEventListener('mouseleave', () => video.pause());
+    });
+  } else {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.play().catch(e => console.log('Play failed:', e));
+        else entry.target.pause();
+      });
+    }, { threshold: 0.5 });
+
+    packVideos.forEach(video => observer.observe(video));
+  }
+}
+
+// Chiama loadCards dopo header/footer
+loadCards();
+
+// ============================
 // HAMBURGER MENU + NEON LINKS
 // ============================
 function initMenu() {
