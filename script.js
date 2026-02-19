@@ -18,10 +18,10 @@ fetch('footer.html')
   });
 
 // ============================
-// FIREBASE CONFIG
+// FIRESTORE CONFIG
 // ============================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDavwOB1jpD2B-Z-NTZlFJ3kjM9L7kdEYA",
@@ -36,16 +36,15 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore();
 
 // ============================
-// LOAD MODULE CARDS FROM FIRESTORE (LIVE)
+// LOAD MODULE CARDS FROM FIRESTORE
 // ============================
-function loadCards() {
-  const grid = document.querySelector('.packs-grid');
-  grid.innerHTML = '';
+async function loadCards() {
+  try {
+    const querySnapshot = await getDocs(collection(db, "prodotti"));
+    const grid = document.querySelector('.packs-grid');
+    grid.innerHTML = '';
 
-  // onSnapshot per aggiornamento live
-  onSnapshot(collection(db, "prodotti"), snapshot => {
-    grid.innerHTML = ''; // reset
-    snapshot.forEach(docSnap => {
+    querySnapshot.forEach(docSnap => {
       const item = docSnap.data();
 
       const card = document.createElement('div');
@@ -64,6 +63,7 @@ function loadCards() {
         </div>
       `;
 
+      // click sulla card
       card.addEventListener('click', () => {
         setTimeout(() => window.location.href = item.LinkPagina, 600);
       });
@@ -71,13 +71,15 @@ function loadCards() {
       grid.appendChild(card);
     });
 
-    // Hover/play video
-    initPackVideos();
-  }, err => console.error('Errore Firestore live:', err));
+    initPackVideos(); // video hover / viewport
+
+  } catch (err) {
+    console.error('Errore caricamento Firestore:', err);
+  }
 }
 
 // ============================
-// VIDEO HOVER / PLAY ON VIEWPORT
+// VIDEO PLAY ON HOVER / VIEWPORT
 // ============================
 function initPackVideos() {
   const packVideos = document.querySelectorAll('.packs-page .pack-card video');
@@ -90,8 +92,8 @@ function initPackVideos() {
       video.pause();
       video.muted = true;
       video.preload = "auto";
-
       const card = video.closest('.pack-card');
+
       card.addEventListener('mouseenter', async () => {
         try { video.currentTime = 0; await video.play(); } 
         catch(e){ console.log('Play failed:', e); }
@@ -116,6 +118,7 @@ function initPackVideos() {
 function initMenu() {
   const hamburger = document.querySelector('.hamburger');
   const menu = document.querySelector('.menu');
+  if (!hamburger || !menu) return;
   const links = menu.querySelectorAll('a');
 
   function resetLinks() {
@@ -133,7 +136,7 @@ function initMenu() {
     if (isOpen) {
       links.forEach((link, index) => {
         link.style.animation = 'none';
-        link.offsetHeight;
+        link.offsetHeight; // trigger reflow
         link.style.animation = `neonIn 0.6s ease forwards`;
         link.style.animationDelay = `${index * 0.25}s`;
       });
@@ -152,6 +155,6 @@ function initMenu() {
 }
 
 // ============================
-// INITIAL CALLS
+// CHIAMATA INIZIALE
 // ============================
-loadCards();
+document.addEventListener('DOMContentLoaded', loadCards);
