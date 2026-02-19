@@ -7,7 +7,7 @@ fetch('header.html')
   .then(res => res.text())
   .then(html => {
     document.getElementById('header').innerHTML = html;
-    if (typeof initMenu === 'function') initMenu(); // inizializza menu se presente
+    initMenu(); // inizializza menu dopo il caricamento
   });
 
 // Load footer
@@ -18,7 +18,7 @@ fetch('footer.html')
   });
 
 // ============================
-// FIREBASE CONFIG & LOAD MODULE CARDS
+// FIRESTORE CONFIG
 // ============================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
@@ -35,26 +35,29 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore();
 
-// Carica prodotti da Firestore
+// ============================
+// LOAD MODULE CARDS FROM FIRESTORE
+// ============================
 async function loadCards() {
   try {
     const querySnapshot = await getDocs(collection(db, "prodotti"));
-    const grid = document.querySelector('.packs-grid');
-    grid.innerHTML = '';
-
+    const data = [];
     querySnapshot.forEach(docSnap => {
-      const item = docSnap.data();
+      data.push(docSnap.data());
+    });
 
+    const grid = document.querySelector('.packs-grid');
+    grid.innerHTML = ''; // svuota card statiche
+
+    data.forEach(item => {
       const card = document.createElement('div');
       card.className = 'pack-card';
       card.dataset.link = item.LinkPagina;
 
       card.innerHTML = `
         <div class="media">
-          ${item.MediaURL.endsWith('.mp4') ? 
-            `<video src="${item.MediaURL}" muted loop playsinline></video>` :
-            `<img src="${item.MediaURL}" alt="${item.Title}" />`
-          }
+          <video src="${item.MediaURL}" muted loop playsinline></video>
+          <span class="neon"></span>
         </div>
         <div class="info">
           <h2>${item.Title}</h2>
@@ -70,6 +73,7 @@ async function loadCards() {
       grid.appendChild(card);
     });
 
+    // Hover / play video
     initPackVideos();
 
   } catch (err) {
@@ -78,11 +82,10 @@ async function loadCards() {
 }
 
 // ============================
-// VIDEO PLAY ON HOVER / VIEWPORT
+// VIDEO HOVER / PLAY ON VIEWPORT
 // ============================
 function initPackVideos() {
   const packVideos = document.querySelectorAll('.packs-page .pack-card video');
-
   if (!packVideos.length) return;
 
   const isDesktop = window.innerWidth >= 1024;
@@ -113,6 +116,47 @@ function initPackVideos() {
 }
 
 // ============================
-// INIT PAGE
+// HAMBURGER MENU + NEON LINKS
 // ============================
-window.addEventListener('DOMContentLoaded', loadCards);
+function initMenu() {
+  const hamburger = document.querySelector('.hamburger');
+  const menu = document.querySelector('.menu');
+  const links = menu.querySelectorAll('a');
+
+  function resetLinks() {
+    links.forEach(link => {
+      link.style.opacity = 0;
+      link.style.animation = 'none';
+      link.style.animationDelay = '0s';
+    });
+  }
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = menu.classList.toggle('open');
+    hamburger.classList.toggle('open');
+
+    if (isOpen) {
+      links.forEach((link, index) => {
+        link.style.animation = 'none';
+        link.offsetHeight;
+        link.style.animation = `neonIn 0.6s ease forwards`;
+        link.style.animationDelay = `${index * 0.25}s`;
+      });
+    } else {
+      resetLinks();
+    }
+  });
+
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      menu.classList.remove('open');
+      hamburger.classList.remove('open');
+      resetLinks();
+    });
+  });
+}
+
+// ============================
+// INITIAL CALLS
+// ============================
+loadCards();
