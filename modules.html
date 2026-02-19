@@ -6,30 +6,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="stylesheet" href="styles.css" />
-  <!-- Nuovo font per i bottoni GET -->
+  <!-- Font per i bottoni GET -->
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div id="header"></div>
+  <!-- HEADER -->
+  <div id="header"></div>
 
-<main class="packs-page">
-  <h1 class="page-title">MODULES</h1>
+  <!-- MAIN CONTENT -->
+  <main class="packs-page">
+    <h1 class="page-title">MODULES</h1>
+    <p class="page-subtitle">
+      Each module is a standalone cinematic audio pack, delivered as high-quality WAV files.
+    </p>
 
-  <p class="page-subtitle">
-    Each module is a standalone cinematic audio pack, delivered as high-quality WAV files.
-  </p>
+    <section class="packs-grid">
+      <!-- Le card dei moduli saranno generate dinamicamente da script.js -->
+    </section>
+  </main>
 
-  <section class="packs-grid">
-    <!-- Le card verranno generate dinamicamente dallo script -->
-  </section>
-</main>
+  <!-- OVERLAY -->
+  <div class="page-overlay"></div>
 
-<!-- OVERLAY -->
-<div class="page-overlay"></div>
+  <!-- FOOTER -->
+  <div id="footer"></div>
 
-<div id="footer"></div>
+  <!-- SCRIPT JS -->
+  <script type="module" src="script.js"></script>
 
-<script src="script.js"></script>
 </body>
 </html>
