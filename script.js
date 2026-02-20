@@ -232,3 +232,20 @@ if (canvas) {
   canvas.addEventListener('touchmove', e => { if (isDragging) seek(e); });
   canvas.addEventListener('touchend', () => isDragging = false);
 }
+
+// COOKIE CONSENT
+document.addEventListener("DOMContentLoaded", () => {
+  const banner = document.getElementById("cookie-banner");
+  const btn = document.getElementById("cookie-accept");
+
+  if (!localStorage.getItem("cookieConsent")) {
+    banner.style.display = "flex";
+  } else {
+    banner.style.display = "none";
+  }
+
+  btn.addEventListener("click", () => {
+    localStorage.setItem("cookieConsent", "true");
+    banner.style.display = "none";
+  });
+});

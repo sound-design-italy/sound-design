@@ -872,3 +872,71 @@ main {
     0 0 10px rgba(0,255,220,0.3);
 }
 
+/* ============================
+   LEGAL PAGES
+============================ */
+.legal-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 160px 24px 120px;
+  line-height: 1.7;
+}
+
+.legal-page h1 {
+  font-weight: 400;
+  margin-bottom: 24px;
+  text-align: center;
+  color: #00fff0;
+}
+
+.legal-page h2 {
+  margin-top: 40px;
+  margin-bottom: 12px;
+  font-weight: 400;
+  color: #00fff0;
+}
+
+.legal-page p {
+  opacity: 0.7;
+}
+
+/* ============================
+   COOKIE BANNER
+============================ */
+.cookie-banner {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(5,5,5,0.95);
+  border: 1px solid rgba(0,255,240,0.3);
+  padding: 16px 24px;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0,255,240,0.15);
+  z-index: 999;
+}
+
+.cookie-banner p {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  letter-spacing: 0.08em;
+}
+
+.cookie-banner button {
+  background: transparent;
+  border: 1px solid rgba(0,255,240,0.6);
+  color: #00fff0;
+  padding: 8px 16px;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cookie-banner button:hover {
+  background: rgba(0,255,240,0.1);
+  box-shadow: 0 0 12px rgba(0,255,240,0.4);
+}
+
