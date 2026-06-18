@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="styles.css">
+<title>ENVMODE — CONTACT</title>
+</head>
+<body>
+
+<nav>
+  <img src="img/logo-envmode.svg" alt="ENVMODE" class="logo-svg">
+
+  <div class="brand-text">ENVMODE</div>
+
+  <button class="menu-btn" onclick="document.getElementById('overlay').classList.add('open')">
+    <span></span><span></span><span></span>
+  </button>
+
+  <div class="nav-rule"></div>
+</nav>
+
+
+<div class="overlay" id="overlay">
+  <button class="overlay-close" onclick="document.getElementById('overlay').classList.remove('open')"></button>
+  <div class="overlay-index">// SYSTEM NAVIGATION</div>
+  <a href="modules.html" class="overlay-link">MODULES</a>
+<a href="signal-test.html" class="overlay-link">SIGNAL TEST</a>
+<a href="contact.html" class="overlay-link current">CONTACT</a>
+
+</div>
+
+
+<main>
+  <div class="page-eyebrow">// DIRECT CHANNEL</div>
+  <div class="page-title">CONTACT</div>
+  <div class="page-sub">Licensing, collaborations, technical inquiries. ENVMODE responds within 48 hours.</div>
+  <form class="contact-form" onsubmit="event.preventDefault(); alert('// TRANSMISSION SENT');">
+    <input type="text" class="contact-input" placeholder="NAME" required>
+    <input type="email" class="contact-input" placeholder="EMAIL ADDRESS" required>
+    <textarea class="contact-textarea" placeholder="MESSAGE"></textarea>
+    <button type="submit" class="contact-btn">SEND TRANSMISSION</button>
+  </form>
+  <div class="contact-direct">// OR DIRECT: <a href="mailto:contact@envmode.com">contact@envmode.com</a></div>
+</main>
+
+
+<footer>
+  <div class="footer-social">
+    <a href="#" aria-label="Instagram" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+    </a>
+    <a href="#" aria-label="YouTube" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9.5v5l5-2.5-5-2.5z" fill="currentColor" stroke="none"/></svg>
+    </a>
+    <a href="https://soundcloud.com/envmode" aria-label="SoundCloud" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 14v3M6 12v5M9 10v7M12 8v9M15 9c2.5 0 4 1.8 4 4 0 .3 0 .6-.1.9M19 11c1.7.2 3 1.6 3 3.3 0 1.8-1.5 3.3-3.3 3.3H12"/></svg>
+    </a>
+  </div>
+  <div class="footer-divider"></div>
+  <div class="footer-links">
+    <a href="#" style="color:inherit;text-decoration:none">PRIVACY POLICY</a><span>|</span>
+    <a href="#" style="color:inherit;text-decoration:none">TERMS OF USE</a><span>|</span>
+    <a href="#" style="color:inherit;text-decoration:none">EULA</a><span>|</span>
+    <a href="#" style="color:inherit;text-decoration:none">COOKIE POLICY</a>
+  </div>
+</footer>
+
+</body>
+</html>
