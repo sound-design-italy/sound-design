@@ -822,3 +822,9 @@ body {
     height: 100svh;
   }
 }
+
+/* LINEA ENVMODE */
+a.brand-text {
+  text-decoration: underline;
+  text-decoration-color: #060606;
+}
