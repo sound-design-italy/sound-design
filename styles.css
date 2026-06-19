@@ -836,3 +836,115 @@ a.brand-text {
   object-fit:cover;
   display:block;
 }
+
+/* MODULI ALLINEATI */
+/* =========================
+   MODULE GRID FIX (FINAL CLEAN SYSTEM)
+========================= */
+
+/* GRIGLIA STABILE */
+.modules-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px 24px;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 20px 24px 100px;
+  box-sizing: border-box;
+}
+
+/* CARD STRUTTURA UNIFORME */
+.module-block {
+  display: grid;
+  grid-template-rows:
+    auto   /* media */
+    auto   /* name */
+    auto   /* class */
+    1fr    /* desc elastica */
+    auto   /* price */
+    auto;  /* button */
+
+  height: 100%;
+  min-width: 0;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* MEDIA (VIDEO / IMG) BLOCCATA UGUALE */
+.module-frame {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* cambia qui se vuoi 4/5 o 16/9 */
+  overflow: hidden;
+  margin-bottom: 18px;
+  position: relative;
+}
+
+.module-frame img,
+.module-frame video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* TESTI: CONSISTENZA VISIVA */
+.mod-name {
+  font-family: var(--sans);
+  font-size: 22px;
+  margin-bottom: 6px;
+  min-height: 28px;
+}
+
+.mod-class {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--red);
+  margin-bottom: 12px;
+  min-height: 14px;
+}
+
+.mod-desc {
+  font-size: 12px;
+  color: var(--white-dim);
+  line-height: 1.6;
+  margin-bottom: 18px;
+
+  /* uniforma altezza visiva tra card */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* PREZZO */
+.mod-price-row {
+  margin-bottom: 14px;
+}
+
+/* BOTTONI SEMPRE ALLINEATI IN FONDO */
+.btn-acquire,
+.btn-locked {
+  margin-top: auto;
+}
+
+/* SICUREZZA OVERFLOW */
+.module-block * {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* MOBILE ADJUST */
+@media (max-width: 768px) {
+  .modules-list {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modules-list {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
