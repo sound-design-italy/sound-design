@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENVMODE // TERMS OF SERVICE</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+  :root{
+    --bg:#0a0a0a;
+    --bg-raised:#111111;
+    --line:#262626;
+    --text:#f2f2f2;
+    --text-dim:#8a8a8a;
+    --text-faint:#4a4a4a;
+    --accent:#e0331c;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  html,body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Space Mono', 'JetBrains Mono', monospace;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  body{
+    min-height:100vh;
+    padding:0 0 120px 0;
+  }
+
+  .scanline{
+    position:fixed;
+    top:0;left:0;right:0;
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity:0.4;
+    animation:scan 8s linear infinite;
+    pointer-events:none;
+    z-index:50;
+  }
+  @keyframes scan{
+    0%{top:0%;}
+    100%{top:100%;}
+  }
+
+  header{
+    border-bottom:1px solid var(--line);
+    padding:48px 24px 32px;
+    position:relative;
+  }
+
+  .brand{
+    font-size:13px;
+    letter-spacing:0.4em;
+    color:var(--text-faint);
+    text-align:center;
+    margin-bottom:24px;
+  }
+
+  .doc-eyebrow{
+    text-align:center;
+    font-size:11px;
+    letter-spacing:0.3em;
+    color:var(--accent);
+    margin-bottom:12px;
+  }
+
+  h1{
+    text-align:center;
+    font-size:clamp(22px, 5vw, 38px);
+    letter-spacing:0.18em;
+    font-weight:700;
+    line-height:1.4;
+  }
+
+  .meta-row{
+    max-width:720px;
+    margin:32px auto 0;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+    font-size:11px;
+    letter-spacing:0.1em;
+    color:var(--text-faint);
+    border-top:1px solid var(--line);
+    padding-top:16px;
+  }
+
+  .meta-row span b{
+    color:var(--text-dim);
+    font-weight:400;
+  }
+
+  main{
+    max-width:720px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  nav.toc{
+    margin-top:48px;
+    border:1px solid var(--line);
+    background:var(--bg-raised);
+    padding:24px;
+  }
+
+  nav.toc .label{
+    font-size:11px;
+    letter-spacing:0.3em;
+    color:var(--text-faint);
+    margin-bottom:16px;
+  }
+
+  nav.toc ol{
+    list-style:none;
+    counter-reset:toc;
+    display:grid;
+    gap:10px;
+  }
+
+  nav.toc li{
+    counter-increment:toc;
+    font-size:13px;
+    letter-spacing:0.04em;
+  }
+
+  nav.toc li a{
+    color:var(--text-dim);
+    text-decoration:none;
+    transition:color 0.15s ease;
+  }
+
+  nav.toc li a:hover{
+    color:var(--accent);
+  }
+
+  nav.toc li::before{
+    content:"SEC." counter(toc, decimal-leading-zero) " — ";
+    color:var(--text-faint);
+  }
+
+  section{
+    margin-top:64px;
+    scroll-margin-top:40px;
+  }
+
+  section .sec-num{
+    font-size:11px;
+    letter-spacing:0.3em;
+    color:var(--accent);
+    margin-bottom:10px;
+  }
+
+  section h2{
+    font-size:18px;
+    letter-spacing:0.08em;
+    font-weight:700;
+    margin-bottom:18px;
+    padding-bottom:14px;
+    border-bottom:1px solid var(--line);
+  }
+
+  section p{
+    font-size:13.5px;
+    line-height:1.85;
+    color:var(--text-dim);
+    margin-bottom:14px;
+    letter-spacing:0.01em;
+  }
+
+  section p strong{
+    color:var(--text);
+    font-weight:700;
+  }
+
+  section ul{
+    list-style:none;
+    margin:0 0 14px 0;
+  }
+
+  section ul li{
+    font-size:13.5px;
+    line-height:1.85;
+    color:var(--text-dim);
+    padding-left:18px;
+    position:relative;
+  }
+
+  section ul li::before{
+    content:"—";
+    position:absolute;
+    left:0;
+    color:var(--accent);
+  }
+
+  .callout{
+    border-left:2px solid var(--accent);
+    padding:16px 20px;
+    background:var(--bg-raised);
+    margin:20px 0;
+  }
+
+  .callout p{
+    margin-bottom:0;
+    color:var(--text);
+    font-size:13px;
+  }
+
+  .callout .callout-label{
+    font-size:10px;
+    letter-spacing:0.25em;
+    color:var(--accent);
+    margin-bottom:8px;
+  }
+
+  .placeholder{
+    color:var(--accent);
+  }
+
+  footer{
+    max-width:720px;
+    margin:96px auto 0;
+    padding:32px 24px 0;
+    border-top:1px solid var(--line);
+    text-align:center;
+  }
+
+  footer .mark{
+    font-size:11px;
+    letter-spacing:0.3em;
+    color:var(--text-faint);
+    margin-bottom:8px;
+  }
+
+  footer .copy{
+    font-size:10px;
+    letter-spacing:0.1em;
+    color:var(--text-faint);
+  }
+
+  ::selection{
+    background:var(--accent);
+    color:var(--bg);
+  }
+
+  @media (max-width:600px){
+    header{padding:36px 18px 24px;}
+    main{padding:0 18px;}
+    .meta-row{flex-direction:column;gap:6px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="scanline"></div>
+
+<header>
+  <div class="brand">E N V M O D E</div>
+  <div class="doc-eyebrow">// LEGAL DOCUMENT — CLASSIFICATION: PUBLIC</div>
+  <h1>TERMS OF<br>SERVICE</h1>
+  <div class="meta-row">
+    <span>DOC ID: <b>ENVMODE-TOS-001</b></span>
+    <span>EFFECTIVE: <b>2026</b></span>
+    <span>REV: <b>1.0</b></span>
+  </div>
+</header>
+
+<main>
+
+  <nav class="toc">
+    <div class="label">// SYSTEM NAVIGATION</div>
+    <ol>
+      <li><a href="#scope">Scope of These Terms</a></li>
+      <li><a href="#operator">Website Operator</a></li>
+      <li><a href="#eula-relationship">Relationship with EULA</a></li>
+      <li><a href="#eligibility">Eligibility</a></li>
+      <li><a href="#digital-products">Products and Digital Content</a></li>
+      <li><a href="#pricing">Pricing and Payments</a></li>
+      <li><a href="#withdrawal">Right of Withdrawal (EU Users)</a></li>
+      <li><a href="#obligations">User Obligations</a></li>
+      <li><a href="#ip">Intellectual Property (Website)</a></li>
+      <li><a href="#warranty">Disclaimer of Warranties</a></li>
+      <li><a href="#liability">Limitation of Liability</a></li>
+      <li><a href="#third-party">Third-Party Services</a></li>
+      <li><a href="#delivery">Product Access and Delivery</a></li>
+      <li><a href="#termination">Termination</a></li>
+      <li><a href="#governing-law">Governing Law and Jurisdiction</a></li>
+      <li><a href="#changes">Changes to These Terms</a></li>
+      <li><a href="#contact">Contact Information</a></li>
+    </ol>
+  </nav>
+
+  <section id="scope">
+    <div class="sec-num">SEC. 01</div>
+    <h2>Scope of These Terms</h2>
+    <p>These Terms of Service ("Terms") govern your access to and use of the website ENVMODE ("the Website") and any related services.</p>
+    <p>By accessing or using the Website, you agree to be bound by these Terms. If you do not agree, you must not use the Website.</p>
+  </section>
+
+  <section id="operator">
+    <div class="sec-num">SEC. 02</div>
+    <h2>Website Operator</h2>
+    <p>The Website is operated by ENVMODE, <span class="placeholder">[Legal Name / Sole Trader Name — to be added], registered in Italy under VAT number: [VAT NUMBER — to be added upon registration]</span>.</p>
+  </section>
+
+  <section id="eula-relationship">
+    <div class="sec-num">SEC. 03</div>
+    <h2>Relationship with EULA</h2>
+    <p>All audio products, sound effects, and sample packs available on the Website are licensed, not sold. Their use is governed exclusively by the End User License Agreement ("EULA").</p>
+    <p>In case of conflict between these Terms and the EULA with respect to product usage, the EULA shall prevail.</p>
+  </section>
+
+  <section id="eligibility">
+    <div class="sec-num">SEC. 04</div>
+    <h2>Eligibility</h2>
+    <p>You must be at least 18 years old or have legal capacity under applicable law to use this Website.</p>
+  </section>
+
+  <section id="digital-products">
+    <div class="sec-num">SEC. 05</div>
+    <h2>Products and Digital Content</h2>
+    <p>All products sold on this Website are digital goods delivered electronically. No physical goods are shipped.</p>
+  </section>
+
+  <section id="pricing">
+    <div class="sec-num">SEC. 06</div>
+    <h2>Pricing and Payments</h2>
+    <p>All prices are displayed in the applicable currency and may include taxes where required.</p>
+    <p>Payments are processed securely by FastSpring, which acts as an independent third-party payment processor and Merchant of Record. ENVMODE does not collect or store payment information.</p>
+  </section>
+
+  <section id="withdrawal">
+    <div class="sec-num">SEC. 07</div>
+    <h2>Right of Withdrawal (EU Users)</h2>
+    <p>By purchasing digital content, you expressly request immediate access to the Products.</p>
+    <p>By completing the purchase, you expressly consent to immediate performance of the contract and acknowledge that you lose your right of withdrawal once access to the digital content begins.</p>
+    <p>You understand and agree that:</p>
+    <ul>
+      <li>You lose your right of withdrawal once download or access begins</li>
+      <li>This waiver is in accordance with EU Directive 2011/83/EU on digital content</li>
+    </ul>
+  </section>
+
+  <section id="obligations">
+    <div class="sec-num">SEC. 08</div>
+    <h2>User Obligations</h2>
+    <p>You agree not to:</p>
+    <ul>
+      <li>Use the Website for unlawful purposes</li>
+      <li>Attempt unauthorized access to systems or data</li>
+      <li>Interfere with the Website's functionality</li>
+      <li>Use bots, scraping, or automated systems without permission</li>
+    </ul>
+  </section>
+
+  <section id="ip">
+    <div class="sec-num">SEC. 09</div>
+    <h2>Intellectual Property (Website)</h2>
+    <p>All Website content, including text, branding, layout, and design, is the property of ENVMODE or its licensors. Unauthorized use is strictly prohibited.</p>
+  </section>
+
+  <section id="warranty">
+    <div class="sec-num">SEC. 10</div>
+    <h2>Disclaimer of Warranties</h2>
+    <p>The Website and its services are provided "as is" and "as available," without warranties of any kind.</p>
+    <p>ENVMODE does not guarantee:</p>
+    <ul>
+      <li>Continuous or uninterrupted access</li>
+      <li>Error-free operation</li>
+      <li>Availability of downloads at all times</li>
+    </ul>
+  </section>
+
+  <section id="liability">
+    <div class="sec-num">SEC. 11</div>
+    <h2>Limitation of Liability</h2>
+    <p>To the fullest extent permitted by law, ENVMODE shall not be liable for:</p>
+    <ul>
+      <li>Any direct or indirect damages</li>
+      <li>Loss of data, profits, or business</li>
+      <li>Technical issues affecting access or downloads</li>
+    </ul>
+    <p>This limitation does not apply where liability cannot be excluded under applicable law.</p>
+  </section>
+
+  <section id="third-party">
+    <div class="sec-num">SEC. 12</div>
+    <h2>Third-Party Services</h2>
+    <p>The Website may rely on third-party services, including payment processors. ENVMODE is not responsible for:</p>
+    <ul>
+      <li>The availability or functionality of such services</li>
+      <li>Any issues arising from their use</li>
+    </ul>
+  </section>
+
+  <section id="delivery">
+    <div class="sec-num">SEC. 13</div>
+    <h2>Product Access and Delivery</h2>
+    <p>Access to purchased Products is provided via digital download, typically through third-party services such as FastSpring.</p>
+    <p>ENVMODE is not responsible for:</p>
+    <ul>
+      <li>Temporary unavailability of download links</li>
+      <li>Issues caused by third-party delivery systems</li>
+    </ul>
+    <p>It is your responsibility to download and securely store the purchased Products after purchase. Download links may be time-limited or subject to access restrictions imposed by third-party providers.</p>
+    <div class="callout">
+      <div class="callout-label">// EXPIRED LINK PROCEDURE</div>
+      <p>In case of expired or inaccessible download links, you may contact contact@envmode.com and provide proof of purchase (e.g., receipt or order confirmation). ENVMODE may, at its sole discretion, provide a new download link.</p>
+    </div>
+  </section>
+
+  <section id="termination">
+    <div class="sec-num">SEC. 14</div>
+    <h2>Termination</h2>
+    <p>ENVMODE reserves the right to suspend or terminate access to the Website in case of violation of these Terms.</p>
+  </section>
+
+  <section id="governing-law">
+    <div class="sec-num">SEC. 15</div>
+    <h2>Governing Law and Jurisdiction</h2>
+    <p>These Terms are governed by the laws of Italy.</p>
+    <p>Any dispute arising from or related to these Terms shall be subject to the exclusive jurisdiction of the courts of Venice, Italy.</p>
+  </section>
+
+  <section id="changes">
+    <div class="sec-num">SEC. 16</div>
+    <h2>Changes to These Terms</h2>
+    <p>ENVMODE may update these Terms at any time. Continued use of the Website constitutes acceptance of the updated Terms.</p>
+  </section>
+
+  <section id="contact">
+    <div class="sec-num">SEC. 17</div>
+    <h2>Contact Information</h2>
+    <p>For any questions regarding these Terms: contact@envmode.com</p>
+  </section>
+
+</main>
+
+<div id="footer"></div>
+
+<script src="script.js" defer></script>
+</body>
+</html>
