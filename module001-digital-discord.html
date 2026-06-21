@@ -513,6 +513,25 @@ a.brand-text {
   text-decoration: underline;
   text-decoration-color: #060606;
 }
+
+/* PIU RESPONSIVE */
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+
+.spec-row .value {
+  min-width: 0;
+  flex: 1;
+  text-align: right;
+  overflow-wrap: anywhere; /* oppure word-break: break-word; */
+}
+
+.info-block {
+  overflow: hidden;
+}
 </style>
 </head>
 <body>
