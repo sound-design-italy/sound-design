@@ -16,7 +16,7 @@ footer {
 }
 
 .footer-social a {
-  color: var(--grey-mid, #555555);
+  color: #555555;
   transition: color 0.25s ease;
   display: flex;
   align-items: center;
@@ -25,13 +25,13 @@ footer {
 }
 
 .footer-social a:hover {
-  color: var(--white, #ECECEC);
+  color: #ECECEC;
 }
 
 .footer-social svg {
   width: 18px;
   height: 18px;
-  fill: currentColor;
+  stroke: currentColor;
 }
 
 .footer-divider {
@@ -50,7 +50,7 @@ footer {
   flex-wrap: wrap;
   font-size: 10px;
   letter-spacing: 0.12em;
-  color: var(--grey-mid, #555555);
+  color: #555555;
 }
 
 .footer-links a {
@@ -60,7 +60,7 @@ footer {
 }
 
 .footer-links a:hover {
-  color: var(--white, #ECECEC);
+  color: #ECECEC;
 }
 
 .footer-links span {
