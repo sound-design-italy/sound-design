@@ -50,14 +50,10 @@
   <div class="page-title">SIGNAL TEST</div>
   <div class="page-sub">Join the ENVMODE transmission list. Get a free selection of assets from MODULE 001, plus early access to future module releases. No spam — only system updates.</div>
 
-<form class="signal-form" id="newsletter-form" action="https://buttondown.com/api/emails/embed-subscribe/envmode" method="POST">
+<form class="signal-form" id="newsletter-form">
   <input type="email" name="email" class="signal-input" placeholder="ENTER SIGNAL ADDRESS" required>
   <button type="submit" class="signal-btn">REQUEST ACCESS</button>
 </form>
-
-<div id="signal-message" class="signal-note" style="display:none;">
-  // SIGNAL RECEIVED
-</div>
 
   <div class="signal-note">// JOIN THE LIST. RECEIVE SYSTEM TRANSMISSIONS. NO SPAM.</div>
 </main>
@@ -67,13 +63,17 @@
 <script src="script.js" defer></script>
 
 <script>
-document.getElementById("newsletter-form").addEventListener("submit", function () {
+document.getElementById("newsletter-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-  setTimeout(() => {
-    document.getElementById("signal-message").style.display = "block";
-    this.reset();
-  }, 500);
+  const formData = new FormData(e.target);
 
+  await fetch("https://buttondown.com/api/emails/embed-subscribe/envmode", {
+    method: "POST",
+    body: formData
+  });
+
+  alert("// SIGNAL RECEIVED");
 });
 </script>
 
