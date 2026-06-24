@@ -49,36 +49,15 @@
   <div class="page-eyebrow">// FREE ACCESS — MAILING LIST</div>
   <div class="page-title">SIGNAL TEST</div>
   <div class="page-sub">Join the ENVMODE transmission list. Get a free selection of assets from MODULE 001, plus early access to future module releases. No spam — only system updates.</div>
-
-<!-- FORM -->
-<div class="signal-form-wrapper">
-  <div class="sender-form-field" data-sender-form-id="dwpDGJ"></div>
-</div>
-
+  <form class="signal-form" onsubmit="event.preventDefault(); alert('// SIGNAL RECEIVED');">
+    <input type="email" class="signal-input" placeholder="ENTER SIGNAL ADDRESS" required>
+    <button type="submit" class="signal-btn">REQUEST ACCESS</button>
+  </form>
   <div class="signal-note">// JOIN THE LIST. RECEIVE SYSTEM TRANSMISSIONS. NO SPAM.</div>
 </main>
 
 <div id="footer"></div>
 
 <script src="script.js" defer></script>
-
-<script>
-  (function (s, e, n, d, er) {
-    s['Sender'] = er;
-    s[er] = s[er] || function () {
-      (s[er].q = s[er].q || []).push(arguments)
-    }, s[er].l = 1 * new Date();
-    s[er].on = function(event, callback) {
-      s[er].listeners = s[er].listeners || {};
-      (s[er].listeners[event] = s[er].listeners[event] || []).push(callback);
-    };
-    var a = e.createElement(n),
-        m = e.getElementsByTagName(n)[0];
-    a.async = 1;
-    a.src = d;
-    m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', 'https://cdn.sender.net/accounts_resources/universal.js', 'sender');
-  sender('06ccfb41b84734')
-</script>
 </body>
 </html>
